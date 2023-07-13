@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PlanIt.Plan.Application\PlanIt.Plan.Application.csproj" />
+      <ProjectReference Include="..\PlanIt.Plan.Domain\PlanIt.Plan.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

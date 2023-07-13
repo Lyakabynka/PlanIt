@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PlanIt.Plan.Domain\PlanIt.Plan.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Cronos" Version="0.7.1" />
+      <PackageReference Include="Hangfire" Version="1.8.3" />
+      <PackageReference Include="Hangfire.AspNetCore" Version="1.8.3" />
+      <PackageReference Include="Hangfire.Core" Version="1.8.3" />
+      <PackageReference Include="Hangfire.Storage.SQLite" Version="0.3.4" />
+      <PackageReference Include="MediatR" Version="12.0.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-preview.5.23280.1" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.4" />
+      <PackageReference Include="OneOf" Version="3.0.255" />
+    </ItemGroup>
+
+</Project>
