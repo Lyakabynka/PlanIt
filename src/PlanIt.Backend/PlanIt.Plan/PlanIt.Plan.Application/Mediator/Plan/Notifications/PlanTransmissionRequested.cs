@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using PlanIt.Plan.Application.Hubs.Plan.Helpers;
+using PlanIt.Plan.Application.Hubs.Helpers;
 using PlanIt.Plan.Application.Interfaces;
 using PlanIt.Plan.Domain.Enums;
 
@@ -27,6 +27,7 @@ public class PlanTransmissionRequestedHandler : INotificationHandler<PlanTransmi
     public async Task Handle(PlanTransmissionRequested notification, CancellationToken cancellationToken)
     {
         await _planHubHelper.TransmitPlanToClient(notification.Plan, cancellationToken);
+        
         if (notification.OneOffPlanId is not null)
         {
             await _dbContext.OneOffPlans

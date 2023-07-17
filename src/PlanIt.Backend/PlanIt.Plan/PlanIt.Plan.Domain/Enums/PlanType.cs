@@ -9,4 +9,5 @@ public enum PlanType
     VoiceCommand,
     Volume,
     SpecialCommand,
+    WeatherCommand,
 }

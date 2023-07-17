@@ -2,9 +2,10 @@
 using System.Text.Json.Serialization;
 using Hangfire;
 using Hangfire.Storage.SQLite;
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using PlanIt.Plan.Application.Configurations;
-using PlanIt.Plan.Application.Hubs.Plan.Helpers;
+using PlanIt.Plan.Application.Hubs.Helpers;
 
 namespace PlanIt.Plan.Application;
 

@@ -1,0 +1,85 @@
+version: '3.5'
+services:
+  
+  postgres:
+    container_name: postgres
+    build:
+      context: PlanIt.Postgres
+      dockerfile: Dockerfile
+      args:
+        - POSTGRES_DB_USERNAME=arg_value
+        - POSTGRES_DB_PASSWORD=arg_value
+    hostname: planit.postgres
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  
+  identity:
+    container_name: identity
+    build:
+      context: PlanIt.Identity
+      dockerfile: Dockerfile
+      args:
+        - POSTGRES_DB_USERNAME=arg_value
+        - POSTGRES_DB_PASSWORD=arg_value
+    image: lyakabynka/planit.identity
+    hostname: planit.identity
+    ports:
+      - 5001:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker.Development
+    restart: on-failure
+    depends_on:
+      - postgres
+    
+  plan:
+    container_name: plan
+    build:
+      context: PlanIt.Plan
+      dockerfile: Dockerfile
+      args:
+        - POSTGRES_DB_USERNAME=arg_value
+        - POSTGRES_DB_PASSWORD=arg_value
+    image: lyakabynka/planit.plan
+    hostname: planit.plan
+    ports:
+      - 5002:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker.Development
+    restart: on-failure
+    depends_on:
+      - postgres
+      - rabbit
+
+  worker:
+    container_name: worker
+    build:
+      context: PlanIt.Worker
+      dockerfile: Dockerfile
+      args:
+        - POSTGRES_DB_USERNAME=arg_value
+        - POSTGRES_DB_PASSWORD=arg_value
+    image: lyakabynka/planit.worker
+    hostname: planit.worker
+    ports:
+      - 5003:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker.Development
+    restart: on-failure
+    depends_on:
+      - postgres
+        
+  rabbit:
+    container_name: rabbit
+    image: rabbitmq:3-management
+    hostname: planit.rabbit
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: on-failure
+      
+volumes:
+  db_data:

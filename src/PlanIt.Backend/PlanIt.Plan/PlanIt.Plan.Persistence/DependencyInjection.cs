@@ -17,11 +17,22 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             string filledConnectionString;
-            // Development :
-            filledConnectionString = dbConfig.ConnectionString;
-            options.UseSqlite(filledConnectionString);
-            // Docker: filledConnectionString = string.Format(dbConfig.ConnectionString, dbConfig.User, dbConfig.Password);
-            //options.UseNpgsql(filledConnectionString);
+            
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (environment == "Docker.Development")
+            {
+                filledConnectionString = string.Format(dbConfig.ConnectionString, dbConfig.User, dbConfig.Password);
+                options.UseNpgsql(filledConnectionString);
+            }
+            else if(environment == "Development")
+            {
+                filledConnectionString = dbConfig.ConnectionString;
+                options.UseSqlite(filledConnectionString);
+            }
+            else
+            {
+                throw new Exception("Failed on creating connection string. Invalid environment.");
+            }
 
             // for optimizing read-only queries, disabling caching of entities
             // in ef select queries before update should be added .AsTracking method  

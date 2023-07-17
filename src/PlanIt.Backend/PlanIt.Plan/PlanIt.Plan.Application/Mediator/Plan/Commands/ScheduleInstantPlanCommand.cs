@@ -36,8 +36,8 @@ public class ScheduleInstantPlanCommandHandler :
         if (plan is null) return new NotFound();
 
         if (plan.UserId != request.UserId) return new Forbidden();
-
-        await _publisher.Publish(new PlanTransmissionRequested
+        
+        _publisher.Publish(new PlanTransmissionRequested
         {
             Plan = plan
         }, cancellationToken);

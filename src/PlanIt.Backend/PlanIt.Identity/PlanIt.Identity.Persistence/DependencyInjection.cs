@@ -18,8 +18,21 @@ public static class DependencyInjection
         {
             string filledConnectionString;
             // Development :
-            filledConnectionString = dbConfig.ConnectionString;
-            options.UseSqlite(filledConnectionString);
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (environment == "Docker.Development")
+            {
+                filledConnectionString = string.Format(dbConfig.ConnectionString, dbConfig.User, dbConfig.Password);
+                options.UseNpgsql(filledConnectionString);
+            }
+            else if(environment == "Development")
+            {
+                filledConnectionString = dbConfig.ConnectionString;
+                options.UseSqlite(filledConnectionString);
+            }
+            else
+            {
+                throw new Exception("Failed on creating connection string. Invalid environment.");
+            }
             // Docker: filledConnectionString = string.Format(dbConfig.ConnectionString, dbConfig.User, dbConfig.Password);
             //options.UseNpgsql(filledConnectionString);
 

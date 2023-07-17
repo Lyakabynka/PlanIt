@@ -1,7 +1,6 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
-namespace PlanIt.Plan.Application.Hubs.Plan;
+namespace PlanIt.Plan.Application.Hubs;
 
 public class PlanHub : Hub
 {
@@ -9,7 +8,7 @@ public class PlanHub : Hub
     public async Task SubscribeToPlan(string userId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, userId);
-        Console.WriteLine("Someone subscribed!");
+        Console.WriteLine($"{userId} subscribed!");
     }
     
     //Client unsubscribes 
@@ -17,5 +16,6 @@ public class PlanHub : Hub
     public async Task UnsubscribeFromPlan(string userId, CancellationToken cancellationToken)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, userId, cancellationToken);
+        Console.WriteLine($"{userId} unsubscribed!");
     }
 }

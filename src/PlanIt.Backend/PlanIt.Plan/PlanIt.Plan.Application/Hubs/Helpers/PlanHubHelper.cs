@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace PlanIt.Plan.Application.Hubs.Plan.Helpers;
+namespace PlanIt.Plan.Application.Hubs.Helpers;
 
 public class PlanHubHelper
 {
@@ -14,6 +14,7 @@ public class PlanHubHelper
     {
         await _hubContext.Clients
             .Group(plan.UserId.ToString())
+            
             .SendAsync("ProcessPlan", plan, cancellationToken);
     }
 }
