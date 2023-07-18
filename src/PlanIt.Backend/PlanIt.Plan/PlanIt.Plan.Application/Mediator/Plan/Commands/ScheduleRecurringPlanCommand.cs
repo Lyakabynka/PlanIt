@@ -1,10 +1,12 @@
-﻿using Cronos;
+﻿using Consume;
+using Cronos;
 using Hangfire;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
+using PlanIt.Plan.Application.Configurations;
 using PlanIt.Plan.Application.Interfaces;
-using PlanIt.Plan.Application.Mediator.Plan.Notifications;
 using PlanIt.Plan.Application.Mediator.Results;
 using PlanIt.Plan.Domain.Entities;
 
@@ -23,14 +25,16 @@ public class ScheduleRecurringPlanCommandHandler : IRequestHandler<ScheduleRecur
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IRecurringJobManagerV2 _recurringJobManager;
-    private readonly IPublisher _publisher;
+    private readonly IPublishEndpoint _endPoint;
+    private readonly RabbitMqConfiguration _rabbitMqConfiguration;
 
     public ScheduleRecurringPlanCommandHandler(IApplicationDbContext dbContext,
-        IRecurringJobManagerV2 recurringJobManager, IPublisher publisher)
+        IRecurringJobManagerV2 recurringJobManager, RabbitMqConfiguration rabbitMqConfiguration, IPublishEndpoint endPoint)
     {
         _dbContext = dbContext;
         _recurringJobManager = recurringJobManager;
-        _publisher = publisher;
+        _rabbitMqConfiguration = rabbitMqConfiguration;
+        _endPoint = endPoint;
     }
 
     public async Task<OneOf<Success, NotFound, Forbidden, BadRequest>> Handle(ScheduleRecurringPlanCommand request,
@@ -51,11 +55,18 @@ public class ScheduleRecurringPlanCommandHandler : IRequestHandler<ScheduleRecur
         var recurringPlanId = Guid.NewGuid();
         _recurringJobManager.AddOrUpdate(
             recurringPlanId.ToString(),
-            () => _publisher.Publish(
-                new PlanTransmissionRequested
-                {
-                    Plan = plan
-                }, cancellationToken),
+            () =>
+                //method which sends message to determined queue ( recurring plan queue )
+                _endPoint.Publish(
+                    new RecurringPlanTriggered
+                    {
+                        Id = plan.Id,
+                        Name = plan.Name,
+                        Information = plan.Information,
+                        ExecutionPath = plan.ExecutionPath,
+                        Type = plan.Type,
+                        UserId = plan.UserId
+                    }, cancellationToken),
             request.CronExpressionUtc,
             new RecurringJobOptions()
             {
@@ -69,7 +80,7 @@ public class ScheduleRecurringPlanCommandHandler : IRequestHandler<ScheduleRecur
             CronExpressionUtc = request.CronExpressionUtc,
             PlanId = plan.Id,
         });
-        
+
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new Success();

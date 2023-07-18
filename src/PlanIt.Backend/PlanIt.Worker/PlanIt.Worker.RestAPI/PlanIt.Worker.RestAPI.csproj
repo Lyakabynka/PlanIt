@@ -13,4 +13,14 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\PlanIt.Worker.Application\PlanIt.Worker.Application.csproj" />
+      <ProjectReference Include="..\PlanIt.Worker.Persistence\PlanIt.Worker.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+    </ItemGroup>
+
 </Project>

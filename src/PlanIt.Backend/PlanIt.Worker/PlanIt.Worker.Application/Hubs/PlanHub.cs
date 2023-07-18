@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace PlanIt.Plan.Application.Hubs;
+namespace PlanIt.Worker.Application.Hubs;
 
 public class PlanHub : Hub
 {

@@ -6,7 +6,7 @@ const { Notification } = require('electron')
 const { shell, app, BrowserWindow } = require('electron')
 const path = require('path')
 
-const loudness = require('loudness')
+const loudness = require('loudness');
 
 const createWindow = () => {
     // Create the browser window.
@@ -49,13 +49,14 @@ EstablishConnection();
 
 async function EstablishConnection() {
     let connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:5002/plan-hub")
+        .withUrl("http://localhost:5003/plan-hub")
         .configureLogging(signalR.LogLevel.Information)
         .withAutomaticReconnect()
         .build();
 
     connection.on("ProcessPlan", (plan) => {
-
+        
+        shell.beep();
         switch (plan.type) {
             //notification
             case 0:
@@ -70,14 +71,14 @@ async function EstablishConnection() {
                 break;
             //open desktop
             case 2:
-
+                shell.openPath(plan.information);
                 break;
             //execute script
             case 3:
-
                 break;
             //voice command
             case 4:
+                
 
                 break;
                 //set the volume
@@ -87,8 +88,11 @@ async function EstablishConnection() {
                 });
                 break;
             case 6:
+                
                 break;
+            //weather command
             case 7:
+                
                 break;
             case 8:
                 break;
@@ -109,7 +113,7 @@ async function EstablishConnection() {
         console.log(e);
     })
 
-    await connection.invoke('SubscribeToPlan', '8adf950c-d53a-4ee3-b2a8-4774f5f5869a')
+    await connection.invoke('SubscribeToPlan', 'f35e8d16-92e4-47ae-95e0-fea8a5c71706')
         .catch(err => {
             console.log(err);
         });

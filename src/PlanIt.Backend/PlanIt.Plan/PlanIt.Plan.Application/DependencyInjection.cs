@@ -5,7 +5,6 @@ using Hangfire.Storage.SQLite;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using PlanIt.Plan.Application.Configurations;
-using PlanIt.Plan.Application.Hubs.Helpers;
 
 namespace PlanIt.Plan.Application;
 
@@ -30,15 +29,26 @@ public static class DependencyInjection
             });
 
         services.AddHangfireServer();
-
-        services.AddSignalR()
-            .AddJsonProtocol(options =>
-            {
-                options.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-            });
-
-        services.AddScoped<PlanHubHelper>();
         
+        services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+            
+            x.UsingRabbitMq((ctx, config) =>
+            {
+                var settings = ctx.GetRequiredService<RabbitMqConfiguration>();
+                
+                config.Host(new Uri(settings.Host), configurator =>
+                {
+                    configurator.Username(settings.Username);
+                    configurator.Password(settings.Password);
+                });
+                
+                config.ConfigureEndpoints(ctx);
+            });
+        });
+
+
         return services;
     }
 }

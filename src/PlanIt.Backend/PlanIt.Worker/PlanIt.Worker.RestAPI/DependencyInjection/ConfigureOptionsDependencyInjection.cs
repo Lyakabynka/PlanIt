@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
-using PlanIt.Plan.Application.Configurations;
+using PlanIt.Worker.Application.Configurations;
 
-namespace PlanIt.Plan.RestAPI.DependencyInjection;
+namespace PlanIt.Worker.RestAPI.DependencyInjection;
 
 public static class ConfigureOptionsDependencyInjection
 {
@@ -17,10 +17,10 @@ public static class ConfigureOptionsDependencyInjection
         services.AddSingleton(resolver =>
             resolver.GetRequiredService<IOptions<JwtConfiguration>>().Value);
         //
-        services.Configure<HangfireConfiguration>(
-            configuration.GetRequiredSection(HangfireConfiguration.HangfireSection));
-        services.AddSingleton(resolver =>
-            resolver.GetRequiredService<IOptions<HangfireConfiguration>>().Value);
+        // services.Configure<HangfireConfiguration>(
+        //     configuration.GetRequiredSection(HangfireConfiguration.HangfireSection));
+        // services.AddSingleton(resolver =>
+        //     resolver.GetRequiredService<IOptions<HangfireConfiguration>>().Value);
         //
         services.Configure<RabbitMqConfiguration>(
             configuration.GetRequiredSection(RabbitMqConfiguration.RabbitMqSection));

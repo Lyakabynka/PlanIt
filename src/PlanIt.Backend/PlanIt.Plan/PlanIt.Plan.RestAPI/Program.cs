@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using PlanIt.Plan.Application;
 using PlanIt.Plan.Application.Converters;
-using PlanIt.Plan.Application.Hubs;
 using PlanIt.Plan.Domain.Enums;
 using PlanIt.Plan.Persistence;
 using PlanIt.Plan.RestAPI.DependencyInjection;
@@ -102,7 +101,6 @@ app.UseSwaggerUI(config =>
 });
 
 app.MapControllers();
-app.MapHub<PlanHub>("/plan-hub");
 
 app.UseHangfireDashboard("/admin/hangfire");
 app.MapHangfireDashboard();

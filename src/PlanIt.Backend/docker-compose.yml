@@ -68,6 +68,7 @@ services:
     restart: on-failure
     depends_on:
       - postgres
+      - rabbit
         
   rabbit:
     container_name: rabbit

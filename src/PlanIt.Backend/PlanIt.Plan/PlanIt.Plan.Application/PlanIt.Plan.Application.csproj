@@ -25,4 +25,8 @@
       <PackageReference Include="OneOf" Version="3.0.255" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="RabbitMQ\Consume\" />
+    </ItemGroup>
+
 </Project>

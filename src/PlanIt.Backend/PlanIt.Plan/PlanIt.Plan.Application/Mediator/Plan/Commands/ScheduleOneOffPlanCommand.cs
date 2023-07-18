@@ -1,9 +1,11 @@
-﻿using Hangfire;
+﻿using Consume;
+using Hangfire;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
+using PlanIt.Plan.Application.Configurations;
 using PlanIt.Plan.Application.Interfaces;
-using PlanIt.Plan.Application.Mediator.Plan.Notifications;
 using PlanIt.Plan.Application.Mediator.Results;
 using PlanIt.Plan.Domain.Entities;
 
@@ -25,14 +27,18 @@ public class
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IBackgroundJobClientV2 _backgroundJobClient;
-    private readonly IPublisher _publisher;
+    private readonly IPublishEndpoint _endPoint;
+    private readonly RabbitMqConfiguration _rabbitMqConfiguration;
 
     public SchedulePlanCommandHandler(
-        IApplicationDbContext dbContext, IBackgroundJobClientV2 backgroundJobClient, IPublisher publisher)
+        IApplicationDbContext dbContext,
+        IBackgroundJobClientV2 backgroundJobClient,
+        RabbitMqConfiguration rabbitMqConfiguration, IPublishEndpoint endPoint)
     {
         _dbContext = dbContext;
         _backgroundJobClient = backgroundJobClient;
-        _publisher = publisher;
+        _rabbitMqConfiguration = rabbitMqConfiguration;
+        _endPoint = endPoint;
     }
 
     public async Task<OneOf<Success, NotFound, Forbidden, BadRequest>> Handle(ScheduleOneOffPlanCommand request,
@@ -49,14 +55,21 @@ public class
 
         //service call
         var oneOffPlanId = Guid.NewGuid();
-        var hangfireId = _backgroundJobClient.Schedule(
-            () => _publisher.Publish(
-                new PlanTransmissionRequested
-                {
-                    OneOffPlanId = oneOffPlanId,
-                    Plan = plan
-                }, cancellationToken),
-            request.ExecuteUtc.ToLocalTime());
+        var hangfireId =
+            _backgroundJobClient.Schedule(
+                () =>
+                    //sending using masstransit
+                    _endPoint.Publish(
+                        new OneOffPlanTriggered
+                        {
+                            Id = plan.Id,
+                            Name = plan.Name,
+                            Information = plan.Information,
+                            ExecutionPath = plan.ExecutionPath,
+                            Type = plan.Type,
+                            UserId = plan.UserId
+                        }, cancellationToken),
+                request.ExecuteUtc.ToLocalTime());
 
         //needs to be deleted once executed in hangfire
         _dbContext.OneOffPlans.Add(new OneOffPlan
