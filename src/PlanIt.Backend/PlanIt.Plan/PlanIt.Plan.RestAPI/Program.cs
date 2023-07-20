@@ -52,7 +52,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
-        options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<PlanType>());
+        //options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<PlanType>());
     });
 
 //swagger

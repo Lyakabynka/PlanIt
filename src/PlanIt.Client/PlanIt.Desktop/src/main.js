@@ -56,6 +56,7 @@ async function EstablishConnection() {
 
     connection.on("ProcessPlan", (plan) => {
         
+        console.log(plan);
         shell.beep();
         switch (plan.type) {
             //notification

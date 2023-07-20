@@ -30,6 +30,6 @@ public class RecurringPlanTriggeredConsumer : IConsumer<RecurringPlanTriggered>
     public async Task Consume(ConsumeContext<RecurringPlanTriggered> context)
     {
         await _hubContext.Clients.Group(context.Message.UserId.ToString())
-            .SendAsync("ProcessPlan");
+            .SendAsync("ProcessPlan", context.Message);
     }
 }

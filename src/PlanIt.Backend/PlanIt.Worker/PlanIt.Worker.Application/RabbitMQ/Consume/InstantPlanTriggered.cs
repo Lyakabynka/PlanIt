@@ -30,6 +30,6 @@ public class InstantPlanTriggeredConsumer : IConsumer<InstantPlanTriggered>
     public async Task Consume(ConsumeContext<InstantPlanTriggered> context)
     {
         await _hubContext.Clients.Group(context.Message.UserId.ToString())
-            .SendAsync("ProcessPlan");
+            .SendAsync("ProcessPlan", context.Message);
     }
 }

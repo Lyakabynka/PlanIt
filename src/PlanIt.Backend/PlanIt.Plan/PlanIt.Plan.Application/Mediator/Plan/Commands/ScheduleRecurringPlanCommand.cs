@@ -2,12 +2,14 @@
 using Cronos;
 using Hangfire;
 using MassTransit;
+using MassTransit.Transports;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
 using PlanIt.Plan.Application.Configurations;
 using PlanIt.Plan.Application.Interfaces;
 using PlanIt.Plan.Application.Mediator.Results;
+using PlanIt.Plan.Application.RabbitMQ;
 using PlanIt.Plan.Domain.Entities;
 
 namespace PlanIt.Plan.Application.Mediator.Plan.Commands;
@@ -25,16 +27,14 @@ public class ScheduleRecurringPlanCommandHandler : IRequestHandler<ScheduleRecur
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IRecurringJobManagerV2 _recurringJobManager;
-    private readonly IPublishEndpoint _endPoint;
     private readonly RabbitMqConfiguration _rabbitMqConfiguration;
 
     public ScheduleRecurringPlanCommandHandler(IApplicationDbContext dbContext,
-        IRecurringJobManagerV2 recurringJobManager, RabbitMqConfiguration rabbitMqConfiguration, IPublishEndpoint endPoint)
+        IRecurringJobManagerV2 recurringJobManager, RabbitMqConfiguration rabbitMqConfiguration)
     {
         _dbContext = dbContext;
         _recurringJobManager = recurringJobManager;
-        _rabbitMqConfiguration = rabbitMqConfiguration;
-        _endPoint = endPoint;
+        _rabbitMqConfiguration = rabbitMqConfiguration; 
     }
 
     public async Task<OneOf<Success, NotFound, Forbidden, BadRequest>> Handle(ScheduleRecurringPlanCommand request,
@@ -53,11 +53,11 @@ public class ScheduleRecurringPlanCommandHandler : IRequestHandler<ScheduleRecur
             return new BadRequest(new Error("CronExpressionUtc", "Invalid cron expression"));
 
         var recurringPlanId = Guid.NewGuid();
-        _recurringJobManager.AddOrUpdate(
+        _recurringJobManager.AddOrUpdate<PublishHelper>(
             recurringPlanId.ToString(),
-            () =>
+            (publishHelper) =>
                 //method which sends message to determined queue ( recurring plan queue )
-                _endPoint.Publish(
+                publishHelper.Publish(
                     new RecurringPlanTriggered
                     {
                         Id = plan.Id,

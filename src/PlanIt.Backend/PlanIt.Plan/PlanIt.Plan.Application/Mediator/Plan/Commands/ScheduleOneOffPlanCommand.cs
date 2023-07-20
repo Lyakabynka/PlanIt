@@ -7,6 +7,7 @@ using OneOf;
 using PlanIt.Plan.Application.Configurations;
 using PlanIt.Plan.Application.Interfaces;
 using PlanIt.Plan.Application.Mediator.Results;
+using PlanIt.Plan.Application.RabbitMQ;
 using PlanIt.Plan.Domain.Entities;
 
 
@@ -27,18 +28,16 @@ public class
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IBackgroundJobClientV2 _backgroundJobClient;
-    private readonly IPublishEndpoint _endPoint;
     private readonly RabbitMqConfiguration _rabbitMqConfiguration;
 
     public SchedulePlanCommandHandler(
         IApplicationDbContext dbContext,
         IBackgroundJobClientV2 backgroundJobClient,
-        RabbitMqConfiguration rabbitMqConfiguration, IPublishEndpoint endPoint)
+        RabbitMqConfiguration rabbitMqConfiguration)
     {
         _dbContext = dbContext;
         _backgroundJobClient = backgroundJobClient;
         _rabbitMqConfiguration = rabbitMqConfiguration;
-        _endPoint = endPoint;
     }
 
     public async Task<OneOf<Success, NotFound, Forbidden, BadRequest>> Handle(ScheduleOneOffPlanCommand request,
@@ -56,10 +55,10 @@ public class
         //service call
         var oneOffPlanId = Guid.NewGuid();
         var hangfireId =
-            _backgroundJobClient.Schedule(
-                () =>
+            _backgroundJobClient.Schedule<PublishHelper>(
+                (publishHelper) =>
                     //sending using masstransit
-                    _endPoint.Publish(
+                    publishHelper.Publish(
                         new OneOffPlanTriggered
                         {
                             Id = plan.Id,

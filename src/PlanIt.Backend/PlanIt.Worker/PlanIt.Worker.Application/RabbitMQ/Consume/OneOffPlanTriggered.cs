@@ -30,6 +30,6 @@ public class OneOffPlanTriggeredConsumer : IConsumer<OneOffPlanTriggered>
     public async Task Consume(ConsumeContext<OneOffPlanTriggered> context)
     {
         await _hubContext.Clients.Group(context.Message.UserId.ToString())
-            .SendAsync("ProcessPlan");
+            .SendAsync("ProcessPlan", context.Message);
     }
 }
