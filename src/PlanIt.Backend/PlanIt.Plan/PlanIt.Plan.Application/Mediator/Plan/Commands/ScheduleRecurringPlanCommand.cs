@@ -1,16 +1,12 @@
-﻿using Consume;
-using Cronos;
+﻿using Cronos;
 using Hangfire;
-using MassTransit;
-using MassTransit.Transports;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using PlanIt.Plan.Application.Configurations;
 using PlanIt.Plan.Application.Interfaces;
 using PlanIt.Plan.Application.Mediator.Results;
-using PlanIt.Plan.Application.RabbitMQ;
 using PlanIt.Plan.Domain.Entities;
+using PlanIt.RabbitMq;
 
 namespace PlanIt.Plan.Application.Mediator.Plan.Commands;
 
@@ -27,14 +23,14 @@ public class ScheduleRecurringPlanCommandHandler : IRequestHandler<ScheduleRecur
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IRecurringJobManagerV2 _recurringJobManager;
-    private readonly RabbitMqConfiguration _rabbitMqConfiguration;
+    private readonly IPublishHelper _publishHelper;
 
     public ScheduleRecurringPlanCommandHandler(IApplicationDbContext dbContext,
-        IRecurringJobManagerV2 recurringJobManager, RabbitMqConfiguration rabbitMqConfiguration)
+        IRecurringJobManagerV2 recurringJobManager, IPublishHelper publishHelper)
     {
         _dbContext = dbContext;
         _recurringJobManager = recurringJobManager;
-        _rabbitMqConfiguration = rabbitMqConfiguration; 
+        _publishHelper = publishHelper;
     }
 
     public async Task<OneOf<Success, NotFound, Forbidden, BadRequest>> Handle(ScheduleRecurringPlanCommand request,
@@ -53,11 +49,11 @@ public class ScheduleRecurringPlanCommandHandler : IRequestHandler<ScheduleRecur
             return new BadRequest(new Error("CronExpressionUtc", "Invalid cron expression"));
 
         var recurringPlanId = Guid.NewGuid();
-        _recurringJobManager.AddOrUpdate<PublishHelper>(
+        _recurringJobManager.AddOrUpdate(
             recurringPlanId.ToString(),
-            (publishHelper) =>
+            () =>
                 //method which sends message to determined queue ( recurring plan queue )
-                publishHelper.Publish(
+                _publishHelper.PublishRecurringPlanTriggered(
                     new RecurringPlanTriggered
                     {
                         Id = plan.Id,

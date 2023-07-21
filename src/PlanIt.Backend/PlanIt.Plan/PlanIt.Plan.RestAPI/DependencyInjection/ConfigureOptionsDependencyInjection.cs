@@ -22,10 +22,15 @@ public static class ConfigureOptionsDependencyInjection
         services.AddSingleton(resolver =>
             resolver.GetRequiredService<IOptions<HangfireConfiguration>>().Value);
         //
-        services.Configure<RabbitMqConfiguration>(
-            configuration.GetRequiredSection(RabbitMqConfiguration.RabbitMqSection));
+        services.Configure<RabbitMqSetupConfiguration>(
+            configuration.GetRequiredSection(RabbitMqSetupConfiguration.RabbitMqSetupSection));
         services.AddSingleton(resolver =>
-            resolver.GetRequiredService<IOptions<RabbitMqConfiguration>>().Value);
+            resolver.GetRequiredService<IOptions<RabbitMqSetupConfiguration>>().Value);
+        //
+        services.Configure<RabbitMqQueuesConfiguration>(
+            configuration.GetRequiredSection(RabbitMqQueuesConfiguration.RabbitMqQueuesSection));
+        services.AddSingleton(resolver =>
+            resolver.GetRequiredService<IOptions<RabbitMqQueuesConfiguration>>().Value);
         //
         
         services.ConfigureOptions<ConfigureJwtBearerOptions>();

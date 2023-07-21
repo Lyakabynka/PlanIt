@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using PlanIt.Worker.Application.Hubs;
 using PlanIt.Worker.Domain.Enums;
 
-// namespace PlanIt.Worker.Application.RabbitMQ.Consume;
-namespace Consume;
+namespace PlanIt.RabbitMq;
 
 public class InstantPlanTriggered
 {
@@ -30,6 +29,6 @@ public class InstantPlanTriggeredConsumer : IConsumer<InstantPlanTriggered>
     public async Task Consume(ConsumeContext<InstantPlanTriggered> context)
     {
         await _hubContext.Clients.Group(context.Message.UserId.ToString())
-            .SendAsync("ProcessPlan", context.Message);
+            .SendAsync("ProcessPlan", context.Message, context.CancellationToken);
     }
 }

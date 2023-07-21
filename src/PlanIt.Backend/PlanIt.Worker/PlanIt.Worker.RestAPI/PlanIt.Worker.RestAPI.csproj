@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <RootNamespace>PlanIt.Worker.RestAPI</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

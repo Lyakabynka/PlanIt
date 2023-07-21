@@ -10,10 +10,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^25.3.0"
+    "electron": "^25.3.1"
   },
   "dependencies": {
     "@microsoft/signalr": "^7.0.9",
-    "loudness": "^0.4.1"
+    "loudness": "^0.4.1",
+    "say": "^0.16.0"
   }
 }

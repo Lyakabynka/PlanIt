@@ -10,7 +10,7 @@ public class Plan : BaseEntity
     public string Information { get; set; }
     public string? ExecutionPath { get; set; }
     public PlanType Type { get; set; }
-    
+
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<OneOffPlan> ScheduledPlans { get; set; }
     

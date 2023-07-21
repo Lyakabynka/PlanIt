@@ -79,7 +79,7 @@ app.UseCors("AllowAll");
 //     // show swagger page using root Uri
 //     config.RoutePrefix = string.Empty;
 //
-//     config.SwaggerEndpoint("swagger/v1/swagger.json", "PlanIt Identity RestAPI");
+//     config.SwaggerEndpoint("swagger/v1/swagger.json", "PlanIt Identity PlanIt.Worker.RestAPI");
 // });
 
 app.MapHub<PlanHub>("plan-hub");

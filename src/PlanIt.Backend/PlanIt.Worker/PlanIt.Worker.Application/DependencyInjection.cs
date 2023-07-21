@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using Consume;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
+using PlanIt.RabbitMq;
 using PlanIt.Worker.Application.Configurations;
 
 namespace PlanIt.Worker.Application;
@@ -18,7 +18,7 @@ public static class DependencyInjection
         
         
         services.AddMassTransit(x =>
-        { 
+        {
             x.AddConsumer<InstantPlanTriggeredConsumer>();
             x.AddConsumer<OneOffPlanTriggeredConsumer>();
             x.AddConsumer<RecurringPlanTriggeredConsumer>();
@@ -26,7 +26,8 @@ public static class DependencyInjection
             x.SetKebabCaseEndpointNameFormatter();
             x.UsingRabbitMq((context, config) =>
             {
-                var settings = context.GetRequiredService<RabbitMqConfiguration>();
+                var settings = context.GetRequiredService<RabbitMqSetupConfiguration>();
+                var queueSettings = context.GetRequiredService<RabbitMqQueuesConfiguration>();
                 
                 config.Host(new Uri(settings.Host), configurator =>
                 {
@@ -34,7 +35,21 @@ public static class DependencyInjection
                     configurator.Password(settings.Password);
                 });
                 
-                config.ConfigureEndpoints(context);
+                
+                config.ReceiveEndpoint(queueSettings.InstantPlanTriggered, ep =>
+                {
+                    ep.ConfigureConsumer<InstantPlanTriggeredConsumer>(context);
+                });
+                
+                config.ReceiveEndpoint(queueSettings.OneOffPlanTriggered, ep =>
+                {
+                    ep.ConfigureConsumer<OneOffPlanTriggeredConsumer>(context);
+                });
+                
+                config.ReceiveEndpoint(queueSettings.RecurringPlanTriggered, ep =>
+                {
+                    ep.ConfigureConsumer<RecurringPlanTriggeredConsumer>(context);
+                });
             });
         });
 

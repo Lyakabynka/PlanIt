@@ -1,8 +1,8 @@
 ﻿namespace PlanIt.Plan.Application.Configurations;
 
-public class RabbitMqConfiguration
+public class RabbitMqSetupConfiguration
 {
-    public static readonly string RabbitMqSection = "RabbitMQ";
+    public static readonly string RabbitMqSetupSection = "RabbitMq_Setup";
     
     public string Host { get; set; }
     public string Username { get; set; }

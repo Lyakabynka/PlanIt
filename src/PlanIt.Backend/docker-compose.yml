@@ -14,6 +14,18 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
   
+  rabbit:
+    container_name: rabbit
+    image: rabbitmq:3-management
+    hostname: planit.rabbit
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: on-failure
+      
   identity:
     container_name: identity
     build:
@@ -70,17 +82,5 @@ services:
       - postgres
       - rabbit
         
-  rabbit:
-    container_name: rabbit
-    image: rabbitmq:3-management
-    hostname: planit.rabbit
-    ports:
-      - "5672:5672" # AMQP port
-      - "15672:15672" # Management UI port
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    restart: on-failure
-      
 volumes:
   db_data:

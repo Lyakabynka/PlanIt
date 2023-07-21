@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.SignalR;
 using PlanIt.Worker.Application.Hubs;
 using PlanIt.Worker.Domain.Enums;
 
-//namespace PlanIt.Worker.Application.RabbitMQ.Consume;
-namespace Consume;
+namespace PlanIt.RabbitMq;
 
 public class RecurringPlanTriggered
 {
+    public Guid RecurringPlanId { get; set; }
+    
+    
     public Guid Id { get; set; }
     
     public string Name { get; set; }
@@ -30,6 +32,6 @@ public class RecurringPlanTriggeredConsumer : IConsumer<RecurringPlanTriggered>
     public async Task Consume(ConsumeContext<RecurringPlanTriggered> context)
     {
         await _hubContext.Clients.Group(context.Message.UserId.ToString())
-            .SendAsync("ProcessPlan", context.Message);
+            .SendAsync("ProcessPlan", context.Message, context.CancellationToken);
     }
 }

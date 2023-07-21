@@ -1,5 +1,6 @@
 const signalR = require('@microsoft/signalr');
-const { Notification } = require('electron')
+const { Notification, ipcMain } = require('electron');
+const say = require('say');
 // main.js
 
 // Modules to control application life and create native browser window
@@ -19,7 +20,7 @@ const createWindow = () => {
     })
 
     // and load the index.html of the app.
-    mainWindow.loadFile('index.html')
+    mainWindow.loadFile('./src/index.html')
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -55,9 +56,9 @@ async function EstablishConnection() {
         .build();
 
     connection.on("ProcessPlan", (plan) => {
-        
+
         console.log(plan);
-        shell.beep();
+
         switch (plan.type) {
             //notification
             case 0:
@@ -76,26 +77,28 @@ async function EstablishConnection() {
                 break;
             //execute script
             case 3:
+
                 break;
             //voice command
             case 4:
-                
-
+                say.speak(plan.information, 'Microsoft Zira Desktop', 1);
                 break;
-                //set the volume
+            //set the volume
             case 5:
                 loudness.getVolume().then(currentVolume => {
                     loudness.setVolume(currentVolume + Number.parseInt(plan.information));
                 });
                 break;
+            //special command
             case 6:
                 
                 break;
             //weather command
             case 7:
-                
+            
                 break;
             case 8:
+
                 break;
         }
 
@@ -114,7 +117,7 @@ async function EstablishConnection() {
         console.log(e);
     })
 
-    await connection.invoke('SubscribeToPlan', 'f35e8d16-92e4-47ae-95e0-fea8a5c71706')
+    await connection.invoke('SubscribeToPlan', 'dda29bef-0069-473e-b652-dc0136ec90f2')
         .catch(err => {
             console.log(err);
         });
