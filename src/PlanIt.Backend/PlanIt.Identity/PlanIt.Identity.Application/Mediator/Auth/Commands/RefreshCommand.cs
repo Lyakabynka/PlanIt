@@ -56,7 +56,8 @@ public class RefreshCommandHandler : IRequestHandler<RefreshCommand, OneOf<Succe
             .FirstOrDefaultAsync(u => u.Id == existingSession.UserId, cancellationToken);
         if (user is null)
         {
-            return new Unauthorized(new Error("UserId", "User was not found"));
+            return new Unauthorized(
+                new Error("UserId", "User was not found"));
         }
         
         var jwtToken = _jwtProvider.CreateToken(user);

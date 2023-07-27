@@ -8,7 +8,20 @@ namespace PlanIt.Identity.RestAPI.Controllers;
 [Route("user")]
 public class UserController : ApiControllerBase
 {
+    /// <summary>
+    /// Registers a User
+    /// </summary>
+    /// <remarks>
+    /// Sample request:
+    /// POST /user/register
+    /// </remarks>
+    /// <response code="200">Success</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="400">Invalid parameters</response>
     [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] RegisterRequestModel requestModel)
     {
         var request = new RegisterCommand()
