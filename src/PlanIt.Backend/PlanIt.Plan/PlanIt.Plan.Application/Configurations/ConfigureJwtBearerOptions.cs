@@ -30,15 +30,13 @@ public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions
             ClockSkew = TimeSpan.Zero,
         };
 
-        // options.Events.OnMessageReceived = context =>
-        // {
-        //     if (context.Request.Cookies.ContainsKey(_jwtConfiguration.JwtCookieName))
-        //     {
-        //         context.Token = context.Request.Cookies[_jwtConfiguration.JwtCookieName];
-        //     }
-        //
-        //     return Task.CompletedTask;
-        // };
-
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Cookies[_jwtConfiguration.JwtCookieName];
+                return Task.CompletedTask;
+            }
+        };
     }
 }

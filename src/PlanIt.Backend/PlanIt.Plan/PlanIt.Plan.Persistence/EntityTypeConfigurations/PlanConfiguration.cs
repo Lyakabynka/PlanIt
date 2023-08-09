@@ -13,12 +13,5 @@ public class PlanConfiguration : IEntityTypeConfiguration<Domain.Entities.Plan>
             .WithOne(op => op.Plan)
             .HasForeignKey(op => op.PlanId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasMany(p => p.RecurringPlans)
-            .WithOne(rp => rp.Plan)
-            .HasForeignKey(rp => rp.PlanId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        
     }
 }

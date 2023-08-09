@@ -31,14 +31,8 @@ public static class DependencyInjection
                     configurator.Password(settings.Password);
                 });
 
-                EndpointConvention.Map<InstantPlanTriggered>(
-                    new Uri($"queue:{queueSettings.InstantPlanTriggered}"));
-                
-                EndpointConvention.Map<OneOffPlanTriggered>(
-                    new Uri($"queue:{queueSettings.OneOffPlanTriggered}"));
-                
-                EndpointConvention.Map<RecurringPlanTriggered>(
-                    new Uri($"queue:{queueSettings.RecurringPlanTriggered}"));
+                EndpointConvention.Map<ScheduledPlanTriggered>(
+                    new Uri($"queue:{queueSettings.ScheduledPlanTriggered}"));
             });
         });
 

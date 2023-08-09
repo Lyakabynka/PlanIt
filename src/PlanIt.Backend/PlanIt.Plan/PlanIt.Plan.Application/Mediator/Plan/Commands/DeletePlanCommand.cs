@@ -36,19 +36,27 @@ public class DeletePlanCommandHandler : IRequestHandler<DeletePlanCommand, OneOf
         var plan = await _dbContext.Plans
             .Where(plan => plan.Id == request.PlanId)
             .Include(plan=>plan.ScheduledPlans)
-            .Include(plan => plan.RecurringPlans)
             .FirstOrDefaultAsync(cancellationToken);
         if (plan is null) return new NotFound();
 
         if (plan.UserId != request.UserId) return new Forbidden();
 
         // deleting scheduled/recurring jobs from hangfire
-        plan.ScheduledPlans.ForEach(sp=>
-            _backgroundJobClient.Delete(sp.HangfireId));
-        plan.RecurringPlans.ForEach(rp => 
-            _recurringJobClient.RemoveIfExists(rp.Id.ToString()));
-        
-        // removing plan from Database along with active plans
+
+        foreach (var scheduledPlan in plan.ScheduledPlans)
+        {
+            switch (scheduledPlan.Type)
+            {
+                case ScheduledPlanType.OneOff:
+                    _backgroundJobClient.Delete(scheduledPlan.HangfireId);
+                    break;
+                case ScheduledPlanType.Recurring:
+                    _recurringJobClient.RemoveIfExists(scheduledPlan.HangfireId);
+                    break;
+            }
+        }
+
+        // removing plan from Database along with active plans ( Cascade Behavior )
         _dbContext.Plans.Remove(plan);
         
         await _dbContext.SaveChangesAsync(cancellationToken);

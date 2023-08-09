@@ -5,9 +5,9 @@ using PlanIt.Worker.Domain.Enums;
 
 namespace PlanIt.RabbitMq;
 
-public class OneOffPlanTriggered
+public class ScheduledPlanTriggered
 {
-    public Guid OneOffPlanId { get; set; }
+    public Guid ScheduledPlanId { get; set; }
     
     
     public Guid Id { get; set; }
@@ -20,16 +20,16 @@ public class OneOffPlanTriggered
     public Guid UserId { get; set; }
 }
 
-public class OneOffPlanTriggeredConsumer : IConsumer<OneOffPlanTriggered>
+public class ScheduledPlanTriggeredConsumer : IConsumer<ScheduledPlanTriggered>
 {
     private readonly IHubContext<PlanHub> _hubContext;
 
-    public OneOffPlanTriggeredConsumer(IHubContext<PlanHub> hubContext)
+    public ScheduledPlanTriggeredConsumer(IHubContext<PlanHub> hubContext)
     {
         _hubContext = hubContext;
     }
 
-    public async Task Consume(ConsumeContext<OneOffPlanTriggered> context)
+    public async Task Consume(ConsumeContext<ScheduledPlanTriggered> context)
     {
         await _hubContext.Clients.Group(context.Message.UserId.ToString())
             .SendAsync("ProcessPlan", context.Message, context.CancellationToken);

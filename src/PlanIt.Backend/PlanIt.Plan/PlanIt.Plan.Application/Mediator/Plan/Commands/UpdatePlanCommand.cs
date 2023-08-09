@@ -41,7 +41,6 @@ public class UpdatePlanCommandHandler : IRequestHandler<UpdatePlanCommand, OneOf
         var plan = await _dbContext.Plans
             .Where(plan => plan.Id == request.PlanId)
             .Include(plan=>plan.ScheduledPlans)
-            .Include(plan=>plan.RecurringPlans)
             .AsTracking()
             .FirstOrDefaultAsync(cancellationToken);
         if (plan is null) return new NotFound();
@@ -54,15 +53,22 @@ public class UpdatePlanCommandHandler : IRequestHandler<UpdatePlanCommand, OneOf
         plan.Type = request.Type;
 
         // deleting scheduled/recurring jobs from hangfire
-        plan.ScheduledPlans?.ForEach(sp=>
-            _backgroundJobClient.Delete(sp.Id.ToString()));
-        plan.RecurringPlans?.ForEach(rp => 
-            _recurringJobClient.RemoveIfExists(rp.Id.ToString()));
+        foreach (var scheduledPlan in plan.ScheduledPlans)
+        {
+            switch (scheduledPlan.Type)
+            {
+                case ScheduledPlanType.OneOff:
+                    _backgroundJobClient.Delete(scheduledPlan.HangfireId);
+                    break;
+                case ScheduledPlanType.Recurring:
+                    _recurringJobClient.RemoveIfExists(scheduledPlan.HangfireId);
+                    break;
+            }
+        }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        plan.ScheduledPlans = null!;
-        plan.RecurringPlans = null!;
+        plan.ScheduledPlans = default!;
         
         return new Success<Domain.Entities.Plan>(plan);
     }

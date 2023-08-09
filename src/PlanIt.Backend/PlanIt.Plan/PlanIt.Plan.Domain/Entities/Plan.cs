@@ -10,12 +10,9 @@ public class Plan : BaseEntity
     public string Information { get; set; }
     public string? ExecutionPath { get; set; }
     public PlanType Type { get; set; }
+    
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<ScheduledPlan>? ScheduledPlans { get; set; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<OneOffPlan> ScheduledPlans { get; set; }
-    
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<RecurringPlan> RecurringPlans { get; set; }
-    
     public Guid UserId { get; set; }
 }

@@ -8,7 +8,7 @@ public struct NotFound { }
 [StructLayout(LayoutKind.Sequential, Size = 1)]
 public struct Forbidden { }
 
-public record Error(string ReasonField, string Message);
+public record Error(string ErrorField, string ErrorMessage);
 
 public struct InvalidCredentials
 {

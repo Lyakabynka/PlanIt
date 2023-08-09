@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Hangfire;
@@ -52,12 +53,16 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
-        //options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<PlanType>());
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 //swagger
 builder.Services.AddSwaggerGen(config =>
 {
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    config.IncludeXmlComments(xmlPath);
+
     config.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Cookie,
@@ -84,7 +89,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseCustomExceptionHandler();
-app.UseJwtTokenExtractor();
+//app.UseJwtTokenExtractor();
 
 app.UseAuthentication();
 app.UseAuthorization();

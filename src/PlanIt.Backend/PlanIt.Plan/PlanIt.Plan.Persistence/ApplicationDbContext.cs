@@ -8,9 +8,7 @@ namespace PlanIt.Plan.Persistence
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         public DbSet<Domain.Entities.Plan> Plans { get; set; }
-        public DbSet<OneOffPlan> OneOffPlans { get; set; }
-        public DbSet<RecurringPlan> RecurringPlans { get; set; }
-
+        public DbSet<ScheduledPlan> ScheduledPlans { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -4,7 +4,5 @@ public class RabbitMqQueuesConfiguration
 {
     public static readonly string RabbitMqQueuesSection = "RabbitMq_Queues";
     
-    public string InstantPlanTriggered { get; set; }
-    public string OneOffPlanTriggered { get; set; }
-    public string RecurringPlanTriggered { get; set; }
+    public string ScheduledPlanTriggered { get; set; }
 }

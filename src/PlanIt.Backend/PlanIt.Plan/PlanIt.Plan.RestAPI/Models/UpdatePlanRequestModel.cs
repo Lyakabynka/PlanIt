@@ -4,7 +4,6 @@ namespace PlanIt.Plan.RestAPI.Models;
 
 public class UpdatePlanRequestModel
 {
-    public Guid PlanId { get; set; }
     public string Name { get; set; }
     public string Information { get; set; }
     public string? ExecutionPath { get; set; }
