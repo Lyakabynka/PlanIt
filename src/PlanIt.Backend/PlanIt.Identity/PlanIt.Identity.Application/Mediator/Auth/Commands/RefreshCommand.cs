@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using PlanIt.Identity.Application.Interfaces;
+using PlanIt.Identity.Application.Abstractions.Interfaces;
 using PlanIt.Identity.Application.Mediator.Results;
 using PlanIt.Identity.Application.Services;
 

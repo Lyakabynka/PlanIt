@@ -20,7 +20,7 @@ const createWindow = () => {
     })
 
     // and load the index.html of the app.
-    mainWindow.loadFile('./src/index.html')
+    mainWindow.loadURL('http://localhost:3000/')
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -59,7 +59,7 @@ async function EstablishConnection() {
 
         console.log(plan);
 
-        switch (plan.type) {
+        switch (plan.planType) {
             //notification
             case 0:
                 new Notification({
@@ -117,7 +117,7 @@ async function EstablishConnection() {
         console.log(e);
     })
 
-    await connection.invoke('SubscribeToPlan', 'dda29bef-0069-473e-b652-dc0136ec90f2')
+    await connection.invoke('SubscribeToPlan', 'c9417986-89f7-4f67-962a-f23606e7e773')
         .catch(err => {
             console.log(err);
         });

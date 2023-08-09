@@ -19,10 +19,8 @@ public static class DependencyInjection
         
         services.AddMassTransit(x =>
         {
-            x.AddConsumer<InstantPlanTriggeredConsumer>();
-            x.AddConsumer<OneOffPlanTriggeredConsumer>();
-            x.AddConsumer<RecurringPlanTriggeredConsumer>();
-            
+            x.AddConsumer<ScheduledPlanTriggeredConsumer>();
+
             x.SetKebabCaseEndpointNameFormatter();
             x.UsingRabbitMq((context, config) =>
             {
@@ -35,20 +33,9 @@ public static class DependencyInjection
                     configurator.Password(settings.Password);
                 });
                 
-                
-                config.ReceiveEndpoint(queueSettings.InstantPlanTriggered, ep =>
+                config.ReceiveEndpoint(queueSettings.ScheduledPlanTriggered, ep =>
                 {
-                    ep.ConfigureConsumer<InstantPlanTriggeredConsumer>(context);
-                });
-                
-                config.ReceiveEndpoint(queueSettings.OneOffPlanTriggered, ep =>
-                {
-                    ep.ConfigureConsumer<OneOffPlanTriggeredConsumer>(context);
-                });
-                
-                config.ReceiveEndpoint(queueSettings.RecurringPlanTriggered, ep =>
-                {
-                    ep.ConfigureConsumer<RecurringPlanTriggeredConsumer>(context);
+                    ep.ConfigureConsumer<ScheduledPlanTriggeredConsumer>(context);
                 });
             });
         });

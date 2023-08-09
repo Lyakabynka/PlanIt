@@ -14,27 +14,27 @@ public class AuthController : ApiControllerBase
     /// Sample request:
     /// GET /auth/login
     /// </remarks>
-    /// <param name="requestModel"/>
+    /// <param name="requestModel">LoginRequestModel with necessary fields</param>
     /// <response code="200">Success</response>
     /// <response code="401">Invalid username or/and password</response>
     /// <response code="400">Invalid parameters</response>
-    [HttpGet("login")]
+    [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Login([FromQuery] LoginRequestModel requestModel)
+    public async Task<IActionResult> Login([FromBody] LoginRequestModel requestModel)
     {
         //TODO: validation
         var request = new LoginCommand()
         {
-            UserName = requestModel.UserName,
+            Username = requestModel.Username,
             Password = requestModel.Password
         };
 
         var result = await Mediator.Send(request);
         return result.Match<IActionResult>(
-            success => Ok(),
-            invalidCredentials => Unauthorized());
+            success => Ok(success.Value),
+            unauthorized => Unauthorized());
     }
 
     /// <summary>

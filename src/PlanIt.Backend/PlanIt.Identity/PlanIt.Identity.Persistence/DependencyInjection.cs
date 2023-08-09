@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PlanIt.Identity.Application.Abstractions.Interfaces;
 using PlanIt.Identity.Application.Configurations;
-using PlanIt.Identity.Application.Interfaces;
 
 namespace PlanIt.Identity.Persistence;
 

@@ -4,7 +4,7 @@ namespace PlanIt.Identity.Domain.Entities;
 
 public class User : BaseEntity
 {
-    public string UserName { get; set; }
+    public string Username { get; set; }
     public string PasswordHash { get; set; }
 
     public string Email { get; set; }
@@ -12,8 +12,6 @@ public class User : BaseEntity
     public UserRole Role { get; set; } = UserRole.User;
 
     public bool IsEmailConfirmed { get; set; } = false;
-
-    public UserData? UserData { get; set; }
 
     public List<RefreshSession> RefreshSessions { get; set; }
 }

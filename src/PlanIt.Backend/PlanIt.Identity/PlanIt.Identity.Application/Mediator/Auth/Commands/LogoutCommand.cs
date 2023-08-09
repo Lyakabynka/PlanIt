@@ -1,14 +1,39 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using PlanIt.Identity.Application.Interfaces;
+using PlanIt.Identity.Application.Abstractions.Interfaces;
+using PlanIt.Identity.Application.Abstractions.Validation;
 using PlanIt.Identity.Application.Mediator.Results;
 using PlanIt.Identity.Application.Services;
 
 namespace PlanIt.Identity.Application.Mediator.Auth.Commands;
 
-public class LogoutCommand : IRequest<OneOf<Success,Unauthorized>> {}
+public class LogoutCommand : IValidatableRequest<OneOf<Success,Unauthorized>> {}
+
+// public class LogoutCommandValidator : AbstractValidator<LogoutCommand>
+// {
+//     public LogoutCommandValidator(IApplicationDbContext dbContext, CookieProvider cookieProvider, IHttpContextAccessor accessor)
+//     {
+//         var context = accessor.HttpContext!;
+//         
+//         var refreshToken = cookieProvider.GetRefreshTokenFromCookie(context.Request);
+//         if (refreshToken is null)
+//         {
+//             return new Unauthorized(
+//                 new Error("RefreshToken", "Unable to extract refresh token from cookies"));
+//         }
+//
+//         var existingSession = await _dbContext.RefreshSessions
+//             .FirstOrDefaultAsync(session => session.RefreshToken == refreshToken, cancellationToken);
+//         if (existingSession is null)
+//         {
+//             return new Unauthorized(
+//                 new Error("RefreshSession", "Refresh session was not found"));
+//         }
+//     }
+// }
 
 public class LogoutCommandHandler : IRequestHandler<LogoutCommand, OneOf<Success,Unauthorized>>
 {

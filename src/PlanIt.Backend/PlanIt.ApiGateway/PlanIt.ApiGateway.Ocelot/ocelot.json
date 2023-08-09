@@ -2,13 +2,13 @@
   "Routes" : [
     {
       "UpstreamPathTemplate" : "/auth/login",
-      "UpstreamHttpMethod": ["Get"],
+      "UpstreamHttpMethod": ["Post"],
       
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "planit.identity",
-          "Port": "80"
+          "Port": 80
         }
       ],
       "DownstreamPathTemplate": "/auth/login"
@@ -21,7 +21,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "planit.identity",
-          "Port": "80"
+          "Port": 80
         }
       ],
       "DownstreamPathTemplate": "/auth/refresh"
@@ -34,7 +34,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "planit.identity",
-          "Port": "80"
+          "Port": 80
         }
       ],
       "DownstreamPathTemplate": "/auth/logout"
@@ -47,13 +47,52 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "planit.identity",
-          "Port": "80"
+          "Port": 80
         }
       ],
       "DownstreamPathTemplate": "/user/register"
+    },
+    {
+      "UpstreamPathTemplate" : "/plans",
+      "UpstreamHttpMethod": ["Get"],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plans"
+    },
+    {
+      "UpstreamPathTemplate" : "/plan/{id:guid}/schedule",
+      "UpstreamHttpMethod": ["Post"],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plan/{id:guid}/schedule"
+    },
+    {
+      "UpstreamPathTemplate" : "/plan",
+      "UpstreamHttpMethod": ["Post"],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plan"
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl" : "http://localhost:800"
+    "BaseUrl" : "http://localhost:80"
   }
 }
