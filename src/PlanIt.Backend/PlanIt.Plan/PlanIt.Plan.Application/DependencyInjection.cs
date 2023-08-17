@@ -18,12 +18,12 @@ public static class DependencyInjection
 
         services.AddMassTransit(x =>
         {
-            x.SetKebabCaseEndpointNameFormatter();
-
-            x.UsingRabbitMq((ctx, config) =>
+            x.AddConsumer<ScheduledPlanProcessedConsumer>();
+            
+            x.UsingRabbitMq((context, config) =>
             {
-                var settings = ctx.GetRequiredService<RabbitMqSetupConfiguration>();
-                var queueSettings = ctx.GetRequiredService<RabbitMqQueuesConfiguration>();
+                var settings = context.GetRequiredService<RabbitMqSetupConfiguration>();
+                var queueSettings = context.GetRequiredService<RabbitMqQueuesConfiguration>();
 
                 config.Host(new Uri(settings.Host), configurator =>
                 {
@@ -31,6 +31,11 @@ public static class DependencyInjection
                     configurator.Password(settings.Password);
                 });
 
+                config.ReceiveEndpoint(queueSettings.ScheduledPlanProcessed, ep =>
+                {
+                    ep.ConfigureConsumer<ScheduledPlanProcessedConsumer>(context);
+                });
+                
                 EndpointConvention.Map<ScheduledPlanTriggered>(
                     new Uri($"queue:{queueSettings.ScheduledPlanTriggered}"));
             });

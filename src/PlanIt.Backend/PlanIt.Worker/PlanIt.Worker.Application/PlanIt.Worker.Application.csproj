@@ -14,10 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="RabbitMQ\Publish\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\PlanIt.Worker.Domain\PlanIt.Worker.Domain.csproj" />
     </ItemGroup>
 

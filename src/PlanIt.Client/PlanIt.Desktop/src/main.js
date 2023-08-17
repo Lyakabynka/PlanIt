@@ -1,13 +1,18 @@
 const signalR = require('@microsoft/signalr');
-const { Notification, ipcMain } = require('electron');
+const { Notification, ipcRenderer, BrowserView } = require('electron');
 const say = require('say');
 // main.js
 
 // Modules to control application life and create native browser window
-const { shell, app, BrowserWindow } = require('electron')
+const { shell, app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 
 const loudness = require('loudness');
+const EnumPlanType = require('./enums/EnumPlanType.js');
+const { title } = require('process');
+
+const { CHANNELS } = require('./shared/constants.js');
+
 
 const createWindow = () => {
     // Create the browser window.
@@ -15,12 +20,17 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: false,
+            contextIsolation: true
         }
     })
 
+
     // and load the index.html of the app.
     mainWindow.loadURL('http://localhost:3000/')
+
+    mainWindow.webContents.openDevTools();
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -39,86 +49,37 @@ app.whenReady().then(() => {
     })
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit()
-})
-
-EstablishConnection();
-
-async function EstablishConnection() {
-    let connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:5003/plan-hub")
-        .configureLogging(signalR.LogLevel.Information)
-        .withAutomaticReconnect()
-        .build();
-
-    connection.on("ProcessPlan", (plan) => {
-
-        console.log(plan);
-
+app.on('ready', () => {
+    ipcMain.on('process_plan_desktop', async (event, plan) => {
         switch (plan.planType) {
             //notification
-            case 0:
+            case EnumPlanType.notification:
                 new Notification({
                     title: plan.name,
                     body: plan.information,
                 }).show()
                 break;
             //open browser
-            case 1:
+            case EnumPlanType.openBrowser:
                 shell.openExternal(plan.information);
                 break;
             //open desktop
-            case 2:
+            case EnumPlanType.openDesktop:
                 shell.openPath(plan.information);
                 break;
-            //execute script
-            case 3:
-
-                break;
-            //voice command
-            case 4:
-                say.speak(plan.information, 'Microsoft Zira Desktop', 1);
-                break;
             //set the volume
-            case 5:
+            case EnumPlanType.volume:
                 loudness.getVolume().then(currentVolume => {
                     loudness.setVolume(currentVolume + Number.parseInt(plan.information));
                 });
                 break;
-            //special command
-            case 6:
-                
-                break;
-            //weather command
-            case 7:
-            
-                break;
-            case 8:
-
-                break;
         }
-
-
-        console.log(plan);
-    });
-
-    connection.onreconnecting(() => {
-        console.log('Connection with server has been lost. Trying to reconnect...');
     })
+})
 
-    await connection.start().then(() => {
-        console.log("yeey!");
-    }).catch((e) => {
-        console.log("Server is offline");
-        console.log(e);
-    })
-
-    await connection.invoke('SubscribeToPlan', 'c9417986-89f7-4f67-962a-f23606e7e773')
-        .catch(err => {
-            console.log(err);
-        });
-}
+// Quit when all windows are closed, except on macOS. There, it's common
+// for applications and their menu bar to stay active until the user quits
+// explicitly with Cmd + Q.
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit()
+})

@@ -7,7 +7,3 @@ export const EnumUserRole: IEnumUserRole = {
     user: 'User',
     administrator: 'Administrator'
 }
-
-
-
-

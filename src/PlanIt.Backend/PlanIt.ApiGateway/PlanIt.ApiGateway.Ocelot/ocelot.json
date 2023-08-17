@@ -90,6 +90,19 @@
         }
       ],
       "DownstreamPathTemplate": "/plan"
+    },
+    {
+      "UpstreamPathTemplate" : "/plan/{id:guid}",
+      "UpstreamHttpMethod": ["Delete"],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plan/{id:guid}"
     }
   ],
   "GlobalConfiguration": {

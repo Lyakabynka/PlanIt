@@ -19,7 +19,7 @@ export const AddPlanDialog: React.FC<AddPlanDialogProps> = ({ open, setOpen }) =
 
     const [name, setName] = useState<string>('');
     const [information, setInformation] = useState<string>('');
-    const [executionPath, setExecutionPath] = useState<string | null>(null);
+    const [executionPath, setExecutionPath] = useState<string>('');
 
     const handleClose = () => {
         setOpen(false);
@@ -43,12 +43,12 @@ export const AddPlanDialog: React.FC<AddPlanDialogProps> = ({ open, setOpen }) =
     return (
         <Dialog
             open={open}
-            // onClose={handleClose}
+            onClose={handleClose}
             maxWidth='xs'>
-            <DialogTitle>Plan it!</DialogTitle>
+            <DialogTitle>Make a plan</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Add new plan to schedule it in the future!
+                    Add new plan to schedule it in the future
                 </DialogContentText>
                 <FormControl
 

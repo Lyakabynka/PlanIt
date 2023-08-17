@@ -2,9 +2,9 @@ import {
     Avatar,
     Box,
     Button,
-    Checkbox, CircularProgress,
+    CircularProgress,
     Container,
-    FormControlLabel, Grid,
+    Grid,
     TextField,
     Typography
 } from "@mui/material";

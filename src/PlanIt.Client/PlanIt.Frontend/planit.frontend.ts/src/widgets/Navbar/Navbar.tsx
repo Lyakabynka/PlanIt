@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState } from "react";
 import { EnumUserRole, useAuthStore } from "../../entities";
 import { Link } from "react-router-dom";
+import { PlanItIcon } from "../../features";
 // import './Navbar.module.scss'
 
 interface INavItem {
@@ -79,10 +80,12 @@ export function Navbar() {
     };
 
     return (
-        <AppBar position="static" color='primary'>
-            <Container maxWidth="xl">
+        <AppBar position="static" sx={{ backgroundColor: 'primary.main' }}>
+            <Container maxWidth='xl'>
                 <Toolbar disableGutters>
-                    {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
+                    <Box sx={{ display: { xs: 'none', md: 'contents' } }}>
+                        <PlanItIcon />
+                    </Box>
                     <Typography
                         variant="h6"
                         noWrap
@@ -144,17 +147,18 @@ export function Navbar() {
                             ))}
                         </Menu>
                     </Box>
-                    {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
+                    <Box sx={{ display: { xs: 'contents', md: 'none' } }}>
+                        <PlanItIcon />
+                    </Box>
                     <Typography
                         variant="h5"
                         noWrap
                         component="a"
                         href=""
                         sx={{
-                            mr: 2,
+                            mr: 11,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
-                            fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
                             color: 'primary.contrastText',

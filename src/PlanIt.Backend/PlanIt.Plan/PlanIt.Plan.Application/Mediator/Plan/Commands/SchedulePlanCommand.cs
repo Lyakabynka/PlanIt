@@ -10,7 +10,7 @@ using PlanIt.RabbitMq;
 
 namespace PlanIt.Plan.Application.Mediator.Plan.Commands;
 
-public class SchedulePlanCommand : 
+public class SchedulePlanCommand :
     IRequest<OneOf<Success, NotFound, Forbidden, BadRequest>>
 {
     public Guid PlanId { get; set; }
@@ -23,8 +23,8 @@ public class SchedulePlanCommand :
     public ScheduledPlanType Type { get; set; }
 }
 
-public class SchedulePlanCommandHandler : 
-    IRequestHandler<SchedulePlanCommand, OneOf<Success, NotFound, Forbidden,BadRequest>>
+public class SchedulePlanCommandHandler :
+    IRequestHandler<SchedulePlanCommand, OneOf<Success, NotFound, Forbidden, BadRequest>>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IBackgroundJobClientV2 _backgroundJobClient;
@@ -124,21 +124,21 @@ public class SchedulePlanCommandHandler :
                     {
                         TimeZone = TimeZoneInfo.Utc
                     });
+                
+                _dbContext.ScheduledPlans.Add(new ScheduledPlan()
+                {
+                    Type = request.Type,
+                    HangfireId = hangfireId,
+                    CronExpressionUtc = request.CronExpressionUtc,
+                    PlanId = plan.Id
+                });
                 break;
             //TODO: Startup
             default:
                 return new BadRequest();
         }
-
-        _dbContext.ScheduledPlans.Add(new ScheduledPlan()
-        {
-            Type = request.Type,
-            HangfireId = hangfireId,
-            ExecuteUtc = request.ExecuteUtc,
-            CronExpressionUtc = request.CronExpressionUtc,
-            PlanId = plan.Id
-        });
         
+
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new Success();

@@ -20,11 +20,5 @@ public class PublishHelper : IPublishHelper
     public async Task PublishScheduledPlanTriggered(ScheduledPlanTriggered message, CancellationToken cancellationToken)
     {
         await _bus.Send(message, cancellationToken);
-
-        //TODO: make another consumer to delete OneOff-Type Scheduled Plans when it executes on Worker Side
-        if (message.ScheduledPlanType == ScheduledPlanType.OneOff)
-            await _dbContext.ScheduledPlans
-                .Where(sp => sp.Id == message.ScheduledPlanId)
-                .ExecuteDeleteAsync(cancellationToken);
     }
 }

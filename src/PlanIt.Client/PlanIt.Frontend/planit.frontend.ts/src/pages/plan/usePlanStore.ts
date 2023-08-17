@@ -1,8 +1,9 @@
 import { persist } from "zustand/middleware";
-import { ICreatePlanRequest, IPlan, ISchedulePlanRequest } from "../../entities";
+import { EnumPlanType, ICreatePlanRequest, IPlan, ISchedulePlanRequest, useAuthStore } from "../../entities";
 import { create } from "zustand";
 import { AES, enc } from "crypto-js";
 import { $api, ENDPOINTS } from "../../shared";
+import * as signalR from '@microsoft/signalr'
 
 interface IPlanStore {
     isLoading: boolean;
@@ -20,6 +21,7 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
     plans: [],
 
     getPlans: async () => {
+
         set({ isLoading: true });
 
         const response = await $api.get<IPlan[]>(ENDPOINTS.PLAN.GET_PLANS);
@@ -30,6 +32,8 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
     },
 
     schedulePlan: async (id: string, requestModel: ISchedulePlanRequest) => {
+        //TODO: to prevent from re-loading Plans delete isLoading, because it makes render Loading element instead of plans
+        // and add another loading into schedule plan dialog
         set({ isLoading: true });
 
         console.log(id);
@@ -47,9 +51,6 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
     },
 
     addPlan: async (params: ICreatePlanRequest) => {
-
-        set({isLoading: true});
-
         const response = await $api.post<IPlan>(ENDPOINTS.PLAN.ADD_PLAN, params);
 
         if(response.status === 400)
@@ -61,8 +62,5 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
             const createdPlan = response.data;
             set({plans: [...get().plans, createdPlan]})
         }
-
-
-        set({isLoading: false});
     }
 }))

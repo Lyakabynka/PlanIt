@@ -18,10 +18,12 @@ const decryptState = (encryptedState: any) => {
 interface IAuthStore {
     isLoggedIn: boolean;
 
+    id: string | null;
     username: string | null;
     email: string | null;
     role: string | null;
     isEmailConfirmed: boolean | null;
+    platform: string | null;
 
     isLoading: boolean;
 
@@ -38,9 +40,11 @@ interface IAuthStore {
 
 export const useAuthStore = create<IAuthStore>()(persist((set, get) => ({
     isLoading: false,
+    id: null,
     username: null,
     email: null,
     role: null,
+    platform: null,
     isEmailConfirmed: null,
     isLoggedIn: false,
     errorField: null,
@@ -63,10 +67,12 @@ export const useAuthStore = create<IAuthStore>()(persist((set, get) => ({
             console.log(userData);
             
             set({
+                id: userData?.id,
                 username: userData?.username,
                 email: userData?.email,
                 role: userData?.role,
-                isEmailConfirmed: userData?.isEmailConfirmed
+                isEmailConfirmed: userData?.isEmailConfirmed,
+                platform: userData?.platform
             });
 
             set({ isLoggedIn: true });

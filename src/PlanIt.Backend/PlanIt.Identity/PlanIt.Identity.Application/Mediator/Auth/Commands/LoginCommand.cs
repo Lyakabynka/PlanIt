@@ -10,6 +10,7 @@ using PlanIt.Identity.Application.Mediator.Results;
 using PlanIt.Identity.Application.Mediator.Results.Shared;
 using PlanIt.Identity.Application.Services;
 using PlanIt.Identity.Domain.Entities;
+using PlanIt.Identity.Domain.Enums;
 
 namespace PlanIt.Identity.Application.Mediator.Auth.Commands;
 
@@ -66,8 +67,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Success<U
         _context = accessor.HttpContext!;
         _cookieProvider = cookieProvider;
     }
-    
-    public async Task<OneOf<Success<UserVm>, Unauthorized>> Handle(LoginCommand request, CancellationToken cancellationToken)
+
+    public async Task<OneOf<Success<UserVm>, Unauthorized>> Handle(LoginCommand request,
+        CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(user => user.Username == request.Username, cancellationToken);
@@ -78,42 +80,39 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<Success<U
                 new Error("Username", "Incorrect username or/and password"));
         }
 
-        //finding existing session by user id
-        var existingSession = await _dbContext.RefreshSessions
-            .AsTracking()
-            .FirstOrDefaultAsync(
-                session => session.UserId == user.Id,
-                cancellationToken);
-        //if session does not exist - create new session
-        if (existingSession is null)
+        //determining user's platform
+        var userAgent = _context
+            .Request
+            .Headers["User-Agent"]
+            .ToString()
+            .ToLower();
+
+        var session = new RefreshSession()
         {
-            existingSession = new RefreshSession()
-            {
-                UserId = user.Id,
-                RefreshToken = Guid.NewGuid()
-            };
-            _dbContext.RefreshSessions.Add(existingSession);
-        }
-        //if session exists - update existing one
-        else
-        {
-            existingSession.RefreshToken = Guid.NewGuid();
-            existingSession.UpdatedAt = DateTime.UtcNow;
-        }
+            //TODO: add expiration time and delete expired sessions
+            UserId = user.Id,
+            RefreshToken = Guid.NewGuid(),
+            UserAgent = userAgent
+        };
+
+        _dbContext.RefreshSessions.Add(session);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         var jwtToken = _jwtProvider.CreateToken(user);
 
         _cookieProvider.AddJwtCookieToResponse(_context.Response, jwtToken);
-        _cookieProvider.AddRefreshCookieToResponse(_context.Response, existingSession.RefreshToken.ToString());
+        _cookieProvider.AddRefreshCookieToResponse(_context.Response, session.RefreshToken.ToString());
 
         return new Success<UserVm>(new UserVm()
         {
+            Id = user.Id,
             Username = user.Username,
             Email = user.Email,
             Role = user.Role,
-            IsEmailConfirmed = user.IsEmailConfirmed
+            IsEmailConfirmed = user.IsEmailConfirmed,
+            //user's current agent
+            UserAgent = session.UserAgent
         });
     }
 }

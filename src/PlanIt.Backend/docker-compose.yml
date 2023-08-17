@@ -10,6 +10,8 @@ services:
         - POSTGRES_DB_USERNAME=arg_value
         - POSTGRES_DB_PASSWORD=arg_value
     hostname: planit.postgres
+    ports: 
+      - "5432:5432"
     image: postgres
     volumes:
       - db_data:/var/lib/postgresql/data

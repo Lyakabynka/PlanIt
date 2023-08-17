@@ -12,6 +12,7 @@ import { FormControl, InputLabel, Select, SelectChangeEvent, Button } from '@mui
 import dayjs, { Dayjs } from 'dayjs'
 import * as Yup from 'yup'; // Import Yup for validation
 import { usePlanStore } from '../../../pages/plan/usePlanStore';
+import { EnumScheduledPlanType } from '../../../entities';
 
 interface SchedulePlanDialogProps {
     planId: string,
@@ -19,11 +20,7 @@ interface SchedulePlanDialogProps {
     setOpen: (params: boolean) => void,
 }
 
-const scheduledPlanTypes: string[] = [
-    "Instant",
-    "OneOff",
-    "Recurring"
-]
+
 
 export const SchedulePlanDialog: React.FC<SchedulePlanDialogProps> =
     ({ planId, open, setOpen }) => {
@@ -124,7 +121,7 @@ export const SchedulePlanDialog: React.FC<SchedulePlanDialogProps> =
                             required
                             onChange={(e) => setType(e.target.value)}
                         >
-                            {scheduledPlanTypes.map((type) => {
+                            {Object.values(EnumScheduledPlanType).map((type) => {
                                 return <MenuItem key={type} value={type}>{type}</MenuItem>
                             })}
                         </Select>

@@ -10,30 +10,22 @@ import Button from '@mui/material/Button';
 import { SchedulePlanDialog } from '../SchedulePlanDialog';
 import { usePlanStore } from '../../../pages/plan/usePlanStore';
 import { Grid } from '@mui/material';
+import { PlanCardDropDown } from './PlanCardDropDown';
 
 interface IPlanProps {
     plan: IPlan
 }
 
 export const PlanCard: React.FC<IPlanProps> = ({ plan }) => {
-    
-    const [open, setOpen] = React.useState(false);
 
-    const { deletePlan } = usePlanStore();
+    const [openSchedulePlanDialog, setOpenSchedulePlanDialog] = React.useState<boolean>(false);
 
-    const handleDeletePlan = () => {
-        deletePlan(plan.id).then();
+    const handleOpenSchedulePlanDialog = () => {
+        setOpenSchedulePlanDialog(true);
     }
 
-    const handleSchedulePlan = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
     return (
+
         <Box sx={{
             display: 'inline-flex',
             margin: '15px',
@@ -42,61 +34,79 @@ export const PlanCard: React.FC<IPlanProps> = ({ plan }) => {
             <Card
                 sx={{
                     backgroundColor: 'primary.light',
-                    minWidth: 200,
-                    maxWidth: 200,
+                    minWidth: 230,
+                    maxWidth: 230,
+                    minHeight: 290,
+                    maxHeight: 290,
                     color: 'primary.dark',
+                    borderRadius: 3,
+                    position: 'relative',
                 }}
                 id={plan.id}>
                 <CardContent>
-                    <Typography variant="h6" component="div">
+                    <PlanCardDropDown planId={plan.id} />
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{
+                            color: 'primary.contrastText',
+                            textAlign: 'center',
+                            verticalAlign: 'center',
+                            height: 70,
+                        }}>
                         {plan.name}
                     </Typography>
-                    <Typography sx={{ mb: 1.5 }}>
+                    <Typography
+                        sx={{
+                            mb: 1.5,
+                            color: 'primary.contrastText',
+                            textAlign: 'center',
+                            verticalAlign: 'center',
+                            height: 70,
+                            opacity: 0.8,
+                            lineHeight: 'normal'
+                        }}>
                         {plan.type}
                     </Typography>
-                    <Typography variant="body2" flexWrap='wrap'>
+                    <Typography
+                        variant="body2"
+                        flexWrap='wrap'
+                        sx={{
+                            color: 'primary.contrastText',
+                            textAlign: 'center',
+                            verticalAlign: 'center',
+                            opacity: 0.9
+                        }}>
                         {plan.information}
                     </Typography>
                 </CardContent>
-                <CardActions>
-                        <Grid
-                            xs={12}
-                            container
-                            rowSpacing={1}
-                            columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                            <Grid item xs={4} md={4}>
-                                <Button size="small" sx={{
-                                    color: 'primary.dark',
-                                    textTransform: 'none',
-                                    textAlign: 'center'
-                                }} onClick={handleSchedulePlan}>
-                                    Schedule
-                                </Button>
-                            </Grid>
+                <CardActions sx={{
+                    padding: 0,
+                }}>
+                    <Button
+                        size="small"
+                        sx={{
+                            color: 'primary.contrastText',
+                            textTransform: 'none',
+                            textAlign: 'center',
+                            
+                            width: '100%',
+                            backgroundColor: 'primary.dark',
+                            borderRadius: 0,
+                            bottom: 0,
+                            position: 'absolute',
 
-                            <Grid item xs={4} md={4}>
-                                <Button size="small" sx={{
-                                    color: 'primary.dark',
-                                    textTransform: 'none',
-                                    textAlign: 'center'
-                                }}>
-                                    Edit
-                                </Button>
-                            </Grid>
+                            borderBottomLeftRadius: 12,
+                            borderBottomRightRadius: 12,
 
-                            <Grid item xs={4} md={4}>
-                                <Button size="small" sx={{
-                                    color: 'primary.dark',
-                                    textTransform: 'none',
-                                    textAlign: 'center'
-                                }} onClick={handleDeletePlan}>
-                                    Delete
-                                </Button>
-                            </Grid>
-                        </Grid>
+                            
+                        }}
+                        onClick={handleOpenSchedulePlanDialog}>
+                        Schedule
+                    </Button>
                 </CardActions>
             </Card>
-            <SchedulePlanDialog planId={plan.id} open={open} setOpen={setOpen} />
+            <SchedulePlanDialog planId={plan.id} open={openSchedulePlanDialog} setOpen={setOpenSchedulePlanDialog} />
         </Box >
     )
 }

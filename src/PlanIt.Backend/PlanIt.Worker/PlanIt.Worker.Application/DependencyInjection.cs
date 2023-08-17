@@ -14,14 +14,14 @@ public static class DependencyInjection
             .AddJsonProtocol(options =>
             {
                 options.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
         
         
         services.AddMassTransit(x =>
         {
             x.AddConsumer<ScheduledPlanTriggeredConsumer>();
-
-            x.SetKebabCaseEndpointNameFormatter();
+            
             x.UsingRabbitMq((context, config) =>
             {
                 var settings = context.GetRequiredService<RabbitMqSetupConfiguration>();
@@ -37,6 +37,9 @@ public static class DependencyInjection
                 {
                     ep.ConfigureConsumer<ScheduledPlanTriggeredConsumer>(context);
                 });
+
+                EndpointConvention.Map<ScheduledPlanProcessed>(
+                    new Uri($"queue:{queueSettings.ScheduledPlanProcessed}"));
             });
         });
 

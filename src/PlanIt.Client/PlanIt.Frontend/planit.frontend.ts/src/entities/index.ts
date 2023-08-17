@@ -4,6 +4,8 @@
 
 export { EnumUserRole } from './enums/EnumUserRole'
 export { EnumPlanType } from './enums/EnumPlanType'
+export {EnumScheduledPlanType } from './enums/EnumScheduledPlanType'
+export {EnumPlatform} from './enums/EnumPlatform'
 
 ////////////////////////////////////
 //////////// REQUESTS //////////////

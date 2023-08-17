@@ -41,6 +41,15 @@ builder.Services.AddCors(options =>
         policy.AllowAnyMethod();
         policy.AllowAnyOrigin();
     });
+    
+    //TODO: Change it
+    options.AddPolicy("React", policy =>
+    {
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+        policy.WithOrigins("http://localhost:3000");
+        policy.AllowCredentials();
+    });
 });
 
 // builder.Services.AddControllers()
@@ -76,7 +85,7 @@ app.UseJwtTokenExtractor();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("AllowAll");
+app.UseCors("React");
 
 // app.UseSwagger();
 // app.UseSwaggerUI(config =>
