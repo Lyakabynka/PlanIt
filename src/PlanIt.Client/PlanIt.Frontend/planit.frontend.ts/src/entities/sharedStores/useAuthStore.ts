@@ -51,21 +51,21 @@ export const useAuthStore = create<IAuthStore>()(persist((set, get) => ({
     errorMessage: null,
 
     login: async (params: ILoginRequest) => {
-        set({ isLoading: true });   
 
-        const response = await $api.post<IUserData | any>(ENDPOINTS.AUTH.LOGIN, params);
-        console.log(response);
+        const response = await $api.post<IUserData | any>(ENDPOINTS.AUTH.LOGIN, params); 
+        console.log(response.data);
         
+
         if (response?.status == 401) {
             const error = response.data;
             set({ errorField: error.errorField, errorMessage: error.errorMessage })
         } else {
 
             console.log(response.data);
-            
-            const userData : IUserData = response.data;
+
+            const userData: IUserData = response.data;
             console.log(userData);
-            
+
             set({
                 id: userData?.id,
                 username: userData?.username,
@@ -76,8 +76,6 @@ export const useAuthStore = create<IAuthStore>()(persist((set, get) => ({
             });
 
             set({ isLoggedIn: true });
-            console.log(get().isLoggedIn);
-            
         }
 
         set({ isLoading: false });
@@ -101,7 +99,7 @@ export const useAuthStore = create<IAuthStore>()(persist((set, get) => ({
         await $api.delete<any>(ENDPOINTS.AUTH.LOGOUT, {
             method: "DELETE"
         });
-        
+
         const { clearAuth } = get();
         clearAuth();
     },

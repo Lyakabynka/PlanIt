@@ -37,12 +37,12 @@ function App() {
   const { id, isLoggedIn } = useAuthStore();
 
   useEffect(() => {
-
-    if (isLoggedIn && id !== null)
+    if (isLoggedIn && id !== null && isLoggedIn == true)
       establishConnection(id);
+    else if (isLoggedIn)
+      closeConnection();
 
-    
-  }, [])
+  }, [isLoggedIn, id])
 
 
   return (

@@ -50,7 +50,7 @@ export const RegisterForm = () => {
         formik.validateForm();
     }, []);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         
@@ -61,7 +61,7 @@ export const RegisterForm = () => {
 
             console.log(emailStr);
             
-            await register({username: usernameStr, email: emailStr, password: passwordStr});
+            register({username: usernameStr, email: emailStr, password: passwordStr}).then();
 
             if(errorMessage?.length == 0)
                 navigate('/login');

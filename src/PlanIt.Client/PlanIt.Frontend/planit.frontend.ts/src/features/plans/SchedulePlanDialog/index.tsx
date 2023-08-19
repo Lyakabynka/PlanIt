@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { CSSProperties, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,14 +13,14 @@ import dayjs, { Dayjs } from 'dayjs'
 import * as Yup from 'yup'; // Import Yup for validation
 import { usePlanStore } from '../../../pages/plan/usePlanStore';
 import { EnumScheduledPlanType } from '../../../entities';
+import Cron from 'react-js-cron';
+import '../SchedulePlanDialog/index.css'
 
 interface SchedulePlanDialogProps {
     planId: string,
     open: boolean,
     setOpen: (params: boolean) => void,
 }
-
-
 
 export const SchedulePlanDialog: React.FC<SchedulePlanDialogProps> =
     ({ planId, open, setOpen }) => {
@@ -44,27 +44,32 @@ export const SchedulePlanDialog: React.FC<SchedulePlanDialogProps> =
                         sx={{ marginTop: '10px' }}
                         label="Select date"
                         onChange={(e) => setDateTime(dayjs(e))}
-                        value={cronExpression}
+                        value={dateTime}
                     />
                 case "Recurring":
-                    return <TextField
-                        sx={{ marginTop: '10px' }}
-                        required
-                        fullWidth
-                        name="cronExpression"
-                        label="Cron Epxression"
-                        type="text"
-                        id="cronExpression"
-                        onChange={(e) => setCronExpression(e.target.value)}
+                    return <Cron
                         value={cronExpression}
+                        setValue={setCronExpression}
+                        className='cron'
                     />
+                // return <TextField
+                //     sx={{ marginTop: '10px' }}
+                //     required
+                //     fullWidth
+                //     name="cronExpression"
+                //     label="Cron Epxression"
+                //     type="text"
+                //     id="cronExpression"
+                //     onChange={(e) => setCronExpression(e.target.value)}
+                //     value={cronExpression}
+                // />
             }
         }
 
         const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 
             e.preventDefault();
-            
+
             if (type === null) {
                 return;
             }

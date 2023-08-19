@@ -1,7 +1,7 @@
 import React from 'react'
 import {CSSProperties} from 'react'
 
-export const PlanItIcon: React.FC = () => {
+export const NavbarPlanItIcon: React.FC = () => {
 
     return (
         <svg width="100" height="60" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">

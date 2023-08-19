@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState } from "react";
 import { EnumUserRole, useAuthStore } from "../../entities";
 import { Link } from "react-router-dom";
-import { PlanItIcon } from "../../features";
+import { NavbarPlanItIcon } from "./NavbarPlanItIcon";
 // import './Navbar.module.scss'
 
 interface INavItem {
@@ -84,7 +84,7 @@ export function Navbar() {
             <Container maxWidth='xl'>
                 <Toolbar disableGutters>
                     <Box sx={{ display: { xs: 'none', md: 'contents' } }}>
-                        <PlanItIcon />
+                        <NavbarPlanItIcon />
                     </Box>
                     <Typography
                         variant="h6"
@@ -148,7 +148,7 @@ export function Navbar() {
                         </Menu>
                     </Box>
                     <Box sx={{ display: { xs: 'contents', md: 'none' } }}>
-                        <PlanItIcon />
+                        <NavbarPlanItIcon />
                     </Box>
                     <Typography
                         variant="h5"

@@ -14,10 +14,12 @@ import { useAuthStore } from "../../../entities";
 import { useFormik } from 'formik'; // Import Formik library
 import * as Yup from 'yup'; // Import Yup for validation
 import Link from '@mui/material/Link';
+import { useNavigate } from "react-router-dom";
 
 export function LoginForm() {
 
     const { login, resetErrorInfo, isLoading, errorMessage } = useAuthStore();
+    const navigate = useNavigate();
 
     const LOGIN_SCHEMA = Yup.object().shape({
         username: Yup.string().min(3, 'Username is too short').max(20, 'Username is too long').required('Username is required'),
@@ -27,19 +29,24 @@ export function LoginForm() {
     const formik = useFormik({
         initialValues: {
             username: '',
-            email: '',
             password: '',
         },
         validationSchema: LOGIN_SCHEMA,
+
         onSubmit: (values) => {
-            const usernameStr = values.username;
-            const passwordStr = values.password;
-
-            login({ userName: usernameStr, password: passwordStr });
-
             console.log(values);
         },
     });
+
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        login({ username: formik.values.username, password: formik.values.password }).then();
+
+        if (errorMessage?.length == 0)
+            navigate('/login');
+    };
 
     useEffect(() => {
         formik.validateForm();
@@ -62,7 +69,7 @@ export function LoginForm() {
                 <Typography component="h1" variant="h5">
                     Authorize
                 </Typography>
-                <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Box component="form" noValidate sx={{ mt: 3 }} onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -103,7 +110,6 @@ export function LoginForm() {
                     </Grid>
                     <Button
                         type="submit"
-                        onClick={formik.submitForm}
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
