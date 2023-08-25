@@ -33,6 +33,14 @@ public static class DependencyInjection
                     configurator.Password(settings.Password);
                 });
                 
+                config.UseJsonDeserializer(true);
+                config.UseJsonSerializer();
+                config.ConfigureJsonSerializerOptions(options =>
+                {
+                    options.Converters.Add(new JsonStringEnumConverter());
+                    return options;
+                });
+                
                 config.ReceiveEndpoint(queueSettings.ScheduledPlanTriggered, ep =>
                 {
                     ep.ConfigureConsumer<ScheduledPlanTriggeredConsumer>(context);

@@ -1,10 +1,14 @@
-﻿using System.Reflection;
+﻿using System.Net.Mime;
+using System.Reflection;
+using System.Text.Json.Serialization;
+using FluentValidation;
 using Hangfire;
 using Hangfire.Storage.SQLite;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using PlanIt.Plan.Application.Configurations;
-using PlanIt.Plan.Application.Interfaces;
+using PlanIt.Plan.Application.Features.Behaviors;
+using PlanIt.Plan.Application.Features.Interfaces;
 using PlanIt.RabbitMq;
 
 namespace PlanIt.Plan.Application;
@@ -14,12 +18,18 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(config =>
-            config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+        {
+            config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+        });
+
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddMassTransit(x =>
         {
             x.AddConsumer<ScheduledPlanProcessedConsumer>();
-            
+
             x.UsingRabbitMq((context, config) =>
             {
                 var settings = context.GetRequiredService<RabbitMqSetupConfiguration>();
@@ -31,11 +41,17 @@ public static class DependencyInjection
                     configurator.Password(settings.Password);
                 });
 
-                config.ReceiveEndpoint(queueSettings.ScheduledPlanProcessed, ep =>
+                config.UseJsonDeserializer(true);
+                config.UseJsonSerializer();
+                config.ConfigureJsonSerializerOptions(options =>
                 {
-                    ep.ConfigureConsumer<ScheduledPlanProcessedConsumer>(context);
+                    options.Converters.Add(new JsonStringEnumConverter());
+                    return options;
                 });
-                
+
+                config.ReceiveEndpoint(queueSettings.ScheduledPlanProcessed,
+                    ep => { ep.ConfigureConsumer<ScheduledPlanProcessedConsumer>(context); });
+
                 EndpointConvention.Map<ScheduledPlanTriggered>(
                     new Uri($"queue:{queueSettings.ScheduledPlanTriggered}"));
             });

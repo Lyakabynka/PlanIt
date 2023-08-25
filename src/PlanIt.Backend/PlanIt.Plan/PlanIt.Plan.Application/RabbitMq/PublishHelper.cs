@@ -1,8 +1,7 @@
 ﻿using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using PlanIt.Plan.Application.Configurations;
-using PlanIt.Plan.Application.Interfaces;
-using PlanIt.Plan.Domain.Enums;
+using PlanIt.Plan.Application.Features.Interfaces;
+using PlanIt.RabbitMq;
 
 namespace PlanIt.RabbitMq;
 

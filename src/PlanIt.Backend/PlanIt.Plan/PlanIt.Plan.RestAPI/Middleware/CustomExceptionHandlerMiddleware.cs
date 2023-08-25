@@ -24,16 +24,13 @@ public class CustomExceptionHandlerMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        context.Response.ContentType = "application/json";
-
         context.Response.StatusCode = exception switch
         {
             JsonException jsonException => (int)HttpStatusCode.BadRequest,
             _ => 500
         };
 
-        await context.Response.WriteAsync(exception.Message + "\n" + exception.InnerException);
-        Console.WriteLine(exception.Message + "\n" + exception.InnerException);
+        await context.Response.WriteAsJsonAsync(exception.Message + "\n" + exception.InnerException);
     }
 }
 

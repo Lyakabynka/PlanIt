@@ -1,7 +1,6 @@
 const signalR = require('@microsoft/signalr');
 const { Notification, ipcRenderer, BrowserView } = require('electron');
 const say = require('say');
-// main.js
 
 // Modules to control application life and create native browser window
 const { shell, app, BrowserWindow, ipcMain } = require('electron')
@@ -22,7 +21,8 @@ const createWindow = () => {
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: false,
-            contextIsolation: true
+            contextIsolation: true,
+            allowRunningInsecureContent: true,
         }
     })
 
@@ -69,9 +69,11 @@ app.on('ready', () => {
                 break;
             //set the volume
             case EnumPlanType.volume:
-                loudness.getVolume().then(currentVolume => {
-                    loudness.setVolume(currentVolume + Number.parseInt(plan.information));
-                });
+                loudness.setVolume(Number.parseInt(plan.information));
+                break;
+            //
+            case EnumPlanType.focusOn:
+                
                 break;
         }
     })

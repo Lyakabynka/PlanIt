@@ -1,9 +1,11 @@
-﻿using System.Net;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PlanIt.Plan.Application.Mediator.Plan.Commands;
-using PlanIt.Plan.Application.Mediator.Plan.Queries;
+using PlanIt.Plan.Application.Mediatr.Plan.Commands.CreatePlan;
+using PlanIt.Plan.Application.Mediatr.Plan.Commands.DeletePlan;
+using PlanIt.Plan.Application.Mediatr.Plan.Commands.UpdatePlan;
+using PlanIt.Plan.Application.Mediatr.Plan.Queries.GetPlans;
+using PlanIt.Plan.Application.Mediatr.ScheduledPlan.Commands.CreateScheduledPlan;
+using PlanIt.Plan.Application.Mediatr.ScheduledPlan.Commands.DeleteScheduledPlan;
 using PlanIt.Plan.RestAPI.Models;
 
 namespace PlanIt.Plan.RestAPI.Controllers;
@@ -38,9 +40,7 @@ public class PlanController : ApiControllerBase
             UserId = UserId
         };
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(success.Value));
+        return await Mediator.Send(request);
     }
 
     /// <summary>
@@ -75,11 +75,7 @@ public class PlanController : ApiControllerBase
             UserId = UserId,
         };
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(success.Value),
-            notFound => NotFound(),
-            forbidden => Forbid());
+        return await Mediator.Send(request);
     }
 
     /// <summary>
@@ -108,11 +104,7 @@ public class PlanController : ApiControllerBase
             UserId = UserId
         };
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(),
-            notFound => NotFound(),
-            forbidden => Forbid());
+        return await Mediator.Send(request);
     }
 
     /// <summary>
@@ -139,9 +131,7 @@ public class PlanController : ApiControllerBase
             UserId = UserId
         };
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(success.Value));
+        return await Mediator.Send(request);
     }
 
     /// <summary>
@@ -168,21 +158,17 @@ public class PlanController : ApiControllerBase
     public async Task<IActionResult> SchedulePlan([FromRoute] Guid id,
         [FromBody] SchedulePlanRequestModel requestModel)
     {
-        var request = new SchedulePlanCommand()
+        var request = new CreateScheduledPlanCommand()
         {
             PlanId = id,
             Type = requestModel.Type,
             CronExpressionUtc = requestModel.CronExpressionUtc,
             ExecuteUtc = requestModel.ExecuteUtc,
+            Arguments = requestModel.Arguments,
             UserId = UserId
         };
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(),
-            notFound => NotFound(),
-            forbidden => Forbid(),
-            badRequest => BadRequest());
+        return await Mediator.Send(request);
     }
 
 
@@ -214,10 +200,6 @@ public class PlanController : ApiControllerBase
             UserId = UserId
         };
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(),
-            notFound => NotFound(),
-            forbidden => Forbid());
+        return await Mediator.Send(request);
     }
 }

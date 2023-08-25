@@ -4,8 +4,8 @@
 
 export { EnumUserRole } from './enums/EnumUserRole'
 export { EnumPlanType } from './enums/EnumPlanType'
-export {EnumScheduledPlanType } from './enums/EnumScheduledPlanType'
-export {EnumPlatform} from './enums/EnumPlatform'
+export { EnumScheduledPlanType } from './enums/EnumScheduledPlanType'
+export { EnumPlatform } from './enums/EnumPlatform'
 
 ////////////////////////////////////
 //////////// REQUESTS //////////////
@@ -27,6 +27,7 @@ export type { IUserData } from './responses/shared/IUserData'
 ////////////////////////////////////
 
 export { useAuthStore } from './sharedStores/useAuthStore';
+export {useSignalRStore} from './sharedStores/useSignalRStore';
 
 ////////////////////////////////////
 //////////// MODELS /////////////

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PlanIt.Identity.Application.Abstractions.Interfaces;
+using PlanIt.Identity.Application.Features.Interfaces;
 using PlanIt.Identity.Domain.Entities;
 using PlanIt.Identity.Persistence.EntityTypeConfigurations;
 

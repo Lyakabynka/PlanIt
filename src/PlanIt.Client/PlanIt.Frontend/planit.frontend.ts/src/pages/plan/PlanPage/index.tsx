@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { usePlanStore } from '../usePlanStore'
 import { IPlan, useAuthStore } from '../../../entities';
 import { Box, CircularProgress } from '@mui/material';
-import { AddPlanButton, PlanCard } from "../../../features";
+import { AddPlanListenPlaceHolder, PlanCard } from "../../../features";
 
 
 export const PlanPage = () => {
@@ -24,7 +24,7 @@ export const PlanPage = () => {
                     return <PlanCard key={plan.id} plan={plan} />
                 })
             }
-            <AddPlanButton />
+            <AddPlanListenPlaceHolder />
         </>
     )
 }

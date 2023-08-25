@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PlanIt.Plan.Application.Configurations;
-using PlanIt.Plan.Application.Interfaces;
+using PlanIt.Plan.Application.Features.Interfaces;
 
 namespace PlanIt.Plan.Persistence;
 

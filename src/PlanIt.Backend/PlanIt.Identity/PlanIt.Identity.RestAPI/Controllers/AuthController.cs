@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PlanIt.Identity.Application.Mediator.Auth.Commands;
+using PlanIt.Identity.Application.Mediatr.Auth.Commands;
+using PlanIt.Identity.Application.Mediatr.Auth.Commands.Login;
+using PlanIt.Identity.Application.Mediatr.Auth.Commands.Logout;
+using PlanIt.Identity.Application.Mediatr.Auth.Commands.Refresh;
 using PlanIt.Identity.RestAPI.Models;
 
 namespace PlanIt.Identity.RestAPI.Controllers;
@@ -31,10 +34,7 @@ public class AuthController : ApiControllerBase
             Password = requestModel.Password
         };
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(success.Value),
-            unauthorized => Unauthorized());
+        return await Mediator.Send(request);
     }
 
     /// <summary>
@@ -55,10 +55,7 @@ public class AuthController : ApiControllerBase
     {
         var request = new RefreshCommand();
         
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(),
-            unauthorized => Unauthorized(unauthorized.Error));
+        return await Mediator.Send(request);
     }
 
     /// <summary>
@@ -76,9 +73,6 @@ public class AuthController : ApiControllerBase
     {
         var request = new LogoutCommand();
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(),
-            unauthorized => Unauthorized(unauthorized.Error));
+        return await Mediator.Send(request);
     }
 }

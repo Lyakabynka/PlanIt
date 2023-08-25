@@ -8,4 +8,6 @@ public class SchedulePlanRequestModel
     
     public string? CronExpressionUtc { get; set; }
     public DateTime? ExecuteUtc { get; set; }
+    
+    public string? Arguments { get; set; }
 }

@@ -1,13 +1,14 @@
-﻿namespace PlanIt.Plan.Domain.Enums;
+﻿using System.Text.Json.Serialization;
+
+namespace PlanIt.Plan.Domain.Enums;
 
 public enum PlanType
 {
     Notification,
     OpenBrowser,
     OpenDesktop,
-    ExecuteScript,
     VoiceCommand,
     Volume,
-    SpecialCommand,
     WeatherCommand,
+    FocusOn
 }

@@ -19,7 +19,10 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.8" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
-      <PackageReference Include="OneOf" Version="3.0.255" />
     </ItemGroup>
+
+
+
+
 
 </Project>

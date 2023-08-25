@@ -98,7 +98,8 @@ export const SchedulePlanDialog: React.FC<SchedulePlanDialogProps> =
                 type: type,
                 executeUtc: dateTime?.toISOString(),
                 cronExpressionUtc: cronExpression,
-            }).then();
+                arguments: null
+            });
 
             handleClose();
         }

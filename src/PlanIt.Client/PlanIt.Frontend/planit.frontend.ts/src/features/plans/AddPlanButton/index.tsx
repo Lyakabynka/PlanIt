@@ -17,13 +17,14 @@ export const AddPlanButton = () => {
             <IconButton
                 size='large'
                 sx={{
-                    position: 'fixed',
-                    bottom: 10,
-                    left: "50%",
-                    transform: "translateX(-50%)",
+                    // position: 'fixed',
+                    // bottom: 10,
+                    // left: "50%",
+                    // transform: "translateX(-50%)",
                     backgroundColor: 'primary.main',
                     color: 'primary.contrastText',
                     '&:hover': { backgroundColor: 'primary.dark' },
+                    marginRight: 2
                 }}
                 onClick={handleAddPlanDialogOpen}>
                 <AddIcon />

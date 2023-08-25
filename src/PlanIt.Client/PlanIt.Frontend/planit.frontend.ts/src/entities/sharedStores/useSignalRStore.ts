@@ -1,8 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import { EnumPlanType, EnumPlatform, IPlan, useAuthStore } from "..";
-import { CHANNELS } from "../../shared/electron/channels";
 import { create } from "zustand";
-import { wait } from "@testing-library/user-event/dist/utils";
 
 declare global {
     interface Window {
@@ -23,8 +21,6 @@ export const useSignalRStore = create<ISignalRStore>()((set, get) => ({
     connection: null,
 
     isElectron: () => {
-        console.log(window.electron);
-
         return window.electron !== null && window.electron !== undefined;
     },
 
@@ -45,7 +41,7 @@ export const useSignalRStore = create<ISignalRStore>()((set, get) => ({
         const { connection } = get();
 
         connection!.on("ProcessPlan", (plan) => {
-
+            console.log("Started processing: ");
             console.log(plan);
 
             switch (plan.planType) {

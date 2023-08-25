@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PlanIt.Identity.Application.Mediator.User.Commands;
-using PlanIt.Identity.Application.Mediator.User.Queries;
+using PlanIt.Identity.Application.Mediatr.User.Commands;
+using PlanIt.Identity.Application.Mediatr.User.Queries;
 using PlanIt.Identity.RestAPI.Models;
 
 namespace PlanIt.Identity.RestAPI.Controllers;
@@ -33,11 +33,8 @@ public class UserController : ApiControllerBase
             Password = requestModel.Password,
             Email = requestModel.Email,
         };
-
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(),
-            collision => Conflict(collision.Error));
+        
+        return await Mediator.Send(request);
     }
 
     /// <summary>
@@ -58,9 +55,6 @@ public class UserController : ApiControllerBase
     {
         var request = new GetUserProfileQuery();
 
-        var result = await Mediator.Send(request);
-        return result.Match<IActionResult>(
-            success => Ok(success.Value),
-            badRequest => BadRequest(badRequest.Error));
+        return await Mediator.Send(request);
     }
 }

@@ -1,13 +1,11 @@
-
 const EnumPlanType = {
     notification: "Notification",
     openBrowser: "OpenBrowser",
     openDesktop: "OpenDesktop",
-    executeScript: "ExecuteScript",
     voiceCommand: "VoiceCommand",
     volume: "Volume",
-    specialCommand: "SpecialCommand",
-    weatherCommand: "WeatherCommand"
+    weatherCommand: "WeatherCommand",
+    focusOn: "FocusOn"
 }
 
 module.exports = EnumPlanType;

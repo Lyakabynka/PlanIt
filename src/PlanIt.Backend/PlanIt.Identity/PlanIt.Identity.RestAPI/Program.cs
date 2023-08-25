@@ -52,8 +52,6 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        //options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter<UserRole>());
-        //options.JsonSerializerOptions.Converters.Add(new SnakeCaseStringEnumConverter<ErrorCode>());
     });
 
 //swagger

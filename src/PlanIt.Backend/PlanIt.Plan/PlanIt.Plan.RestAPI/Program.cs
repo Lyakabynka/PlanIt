@@ -5,7 +5,6 @@ using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using PlanIt.Plan.Application;
-using PlanIt.Plan.Application.Converters;
 using PlanIt.Plan.Domain.Enums;
 using PlanIt.Plan.Persistence;
 using PlanIt.Plan.RestAPI.DependencyInjection;
