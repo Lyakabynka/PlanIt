@@ -23,7 +23,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result>
             PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, HashType.SHA512),
         };
 
-        await _dbContext.Users.AddAsync(user, cancellationToken);
+        _dbContext.Users.Add(user);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 

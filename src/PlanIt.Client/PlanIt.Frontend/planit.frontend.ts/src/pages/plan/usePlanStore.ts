@@ -1,5 +1,5 @@
 import { persist } from "zustand/middleware";
-import { EnumPlanType, ICreatePlanRequest, IPlan, ISchedulePlanRequest, useAuthStore } from "../../entities";
+import { EnumPlanType, ICreatePlanRequest, IPlan, ICreateScheduledPlanRequest, useAuthStore } from "../../entities";
 import { create } from "zustand";
 import { AES, enc } from "crypto-js";
 import { $api, ENDPOINTS } from "../../shared";
@@ -11,9 +11,10 @@ interface IPlanStore {
 
 
     getPlans: () => Promise<void>;
-    schedulePlan: (id: string, requestModel: ISchedulePlanRequest) => Promise<void>;
     deletePlan: (id: string) => Promise<void>;
     addPlan: (params: ICreatePlanRequest) => Promise<void>;
+    createScheduledPlan: (requestModel: ICreateScheduledPlanRequest) => Promise<void>;
+    deleteScheduledPlan: (id: string) => Promise<void>;
 }
 
 export const usePlanStore = create<IPlanStore>()((set, get) => ({
@@ -31,22 +32,10 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
         set({ isLoading: false })
     },
 
-    schedulePlan: async (id: string, requestModel: ISchedulePlanRequest) => {
-        //TODO: to prevent from re-loading Plans delete isLoading, because it makes render Loading element instead of plans
-        // and add another loading into schedule plan dialog
-        set({ isLoading: true });
-
-        console.log(id);
-        console.log(requestModel);
-
-        const response = await $api.post<any>(ENDPOINTS.PLAN.SCHEDULE_PLAN.replace('{id:guid}', id), requestModel);
-
-        set({ isLoading: false });
-    },
-
+    
     deletePlan: async (id: string) => {
         await $api.delete(ENDPOINTS.PLAN.DELETE_PLAN.replace('{id:guid}', id));
-
+        
         set({ plans: get().plans?.filter(plan => plan.id != id) });
     },
 
@@ -62,5 +51,23 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
             const createdPlan = response.data;
             set({plans: [...get().plans, createdPlan]})
         }
-    }
+    },
+
+    createScheduledPlan: async (requestModel: ICreateScheduledPlanRequest) => {
+        //TODO: to prevent from re-loading Plans delete isLoading, because it makes render Loading element instead of plans
+        // and add another loading into schedule plan dialog
+        set({ isLoading: true });
+
+        console.log(requestModel);
+
+        const response = await $api.post<any>(ENDPOINTS.SCHEDULED_PLAN.CREATE_SCHEDULED_PLAN, requestModel);
+
+        set({ isLoading: false });
+    },
+
+    deleteScheduledPlan: async (id: string) => {
+        set({isLoading: true});
+
+        const response = await $api.delete<any>(ENDPOINTS.SCHEDULED_PLAN.DELETE_SCHEDULED_PLAN.replace('{id:guid}', id));
+    },
 }))

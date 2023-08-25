@@ -11,8 +11,9 @@ public class Plan : BaseEntity
     public string? ExecutionPath { get; set; }
     public PlanType Type { get; set; }
     
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<ScheduledPlan>? ScheduledPlans { get; set; }
+    public List<ScheduledPlan> ScheduledPlans { get; set; }
+    
+    public List<PlanGroup> PlanGroups { get; set; }
 
     public Guid UserId { get; set; }
 }

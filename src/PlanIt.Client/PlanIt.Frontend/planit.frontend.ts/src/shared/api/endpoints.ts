@@ -15,9 +15,15 @@ export const ENDPOINTS = {
     },
     PLAN: {
         GET_PLANS: `${API_URL}/plans`,
-        SCHEDULE_PLAN: `${API_URL}/plan/{id:guid}/schedule`,
         ADD_PLAN: `${API_URL}/plan`,
         DELETE_PLAN: `${API_URL}/plan/{id:guid}`
+    },
+    SCHEDULED_PLAN: {
+        CREATE_SCHEDULED_PLAN: `${API_URL}/scheduled-plan`,
+        DELETE_SCHEDULED_PLAN: `${API_URL}/{id:guid}`,
+        // GET_SCHEDULED_PLANS: `${API_URL}/{plan-id:guid}`
+
+
     }
 }
 

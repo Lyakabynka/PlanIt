@@ -4,6 +4,8 @@ namespace PlanIt.Plan.RestAPI.Models;
 
 public class SchedulePlanRequestModel
 {
+    public Guid PlanId { get; set; }
+    
     public ScheduledPlanType Type { get; set; }
     
     public string? CronExpressionUtc { get; set; }

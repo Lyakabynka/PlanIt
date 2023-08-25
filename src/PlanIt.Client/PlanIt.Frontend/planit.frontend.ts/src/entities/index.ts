@@ -14,7 +14,7 @@ export { EnumPlatform } from './enums/EnumPlatform'
 export type { ILoginRequest } from './requests/auth/ILoginRequest';
 export type { IRegisterRequest } from './requests/auth/IRegisterRequest'
 export type { ICreatePlanRequest } from './requests/plan/ICreatePlanRequest'
-export type { ISchedulePlanRequest } from './requests/plan/ISchedulePlanRequest'
+export type { ICreateScheduledPlanRequest } from './requests/scheduledPlan/ICreateScheduledPlanRequest'
 
 ////////////////////////////////////
 //////////// RESPONSES /////////////

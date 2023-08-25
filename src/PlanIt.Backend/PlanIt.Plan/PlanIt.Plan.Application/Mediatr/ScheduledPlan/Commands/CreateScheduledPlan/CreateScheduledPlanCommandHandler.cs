@@ -48,6 +48,7 @@ public class CreateScheduledPlanCommandHandler :
                     ScheduledPlanType = request.Type,
                     Id = plan.Id,
                     Name = plan.Name,
+                    //If arguments are not null, substitute information with arguments
                     Information = string.IsNullOrWhiteSpace(request.Arguments) ? plan.Information : request.Arguments,
                     ExecutionPath = plan.ExecutionPath,
                     PlanType = plan.Type,

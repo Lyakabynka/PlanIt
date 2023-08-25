@@ -9,6 +9,7 @@ namespace PlanIt.Plan.Persistence
     {
         public DbSet<Domain.Entities.Plan> Plans { get; set; }
         public DbSet<ScheduledPlan> ScheduledPlans { get; set; }
+        public DbSet<PlanGroup> PlanGroups { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -18,6 +19,7 @@ namespace PlanIt.Plan.Persistence
         {
             modelBuilder.ApplyConfiguration(new PlanConfiguration());
             modelBuilder.ApplyConfiguration(new ScheduledPlanConfiguration());
+            modelBuilder.ApplyConfiguration(new PlanGroupConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

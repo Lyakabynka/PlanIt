@@ -1,4 +1,6 @@
-export interface ISchedulePlanRequest {
+export interface ICreateScheduledPlanRequest {
+    planId: string,
+
     type: string,
 
     cronExpressionUtc: string | null,

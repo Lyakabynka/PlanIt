@@ -4,12 +4,12 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import { IconButton } from '@mui/material';
 import { usePlanStore } from '../../../pages/plan/usePlanStore';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { EnumPlanType, EnumScheduledPlanType, IPlan, ISchedulePlanRequest } from '../../../entities';
+import { EnumPlanType, EnumScheduledPlanType, IPlan, ICreateScheduledPlanRequest } from '../../../entities';
 import BlockIcon from '@mui/icons-material/Block';
 
 function generateCommands(
     plans: IPlan[],
-    schedulePlan: (planId: string, requestModel: ISchedulePlanRequest) => Promise<void>) {
+    schedulePlan: (requestModel: ICreateScheduledPlanRequest) => Promise<void>) {
 
     const commands = plans.map((plan) => {
 
@@ -20,7 +20,8 @@ function generateCommands(
                     callback: (volume: string) => {         
                         try {
                             const number = Number.parseInt(volume);
-                            schedulePlan(plan.id, {
+                            schedulePlan({
+                                planId: plan.id,
                                 type: EnumScheduledPlanType.instant,
                                 cronExpressionUtc: null,
                                 executeUtc: null,
@@ -49,7 +50,8 @@ function generateCommands(
                 return ({
                     command: `${plan.name}`,
                     callback: () => {
-                        schedulePlan(plan.id, {
+                        schedulePlan({
+                            planId: plan.id,
                             type: EnumScheduledPlanType.instant,
                             cronExpressionUtc: null,
                             executeUtc: null,
@@ -65,9 +67,9 @@ function generateCommands(
 
 export const Listen = () => {
 
-    const { plans, schedulePlan } = usePlanStore();
+    const { plans, createScheduledPlan } = usePlanStore();
 
-    const commands = generateCommands(plans, schedulePlan);
+    const commands = generateCommands(plans, createScheduledPlan);
 
     const { transcript,
         interimTranscript,

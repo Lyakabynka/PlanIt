@@ -25,7 +25,7 @@ interface SchedulePlanDialogProps {
 export const SchedulePlanDialog: React.FC<SchedulePlanDialogProps> =
     ({ planId, open, setOpen }) => {
 
-        const { schedulePlan } = usePlanStore();
+        const { createScheduledPlan } = usePlanStore();
 
         const [type, setType] = useState('');
         const [dateTime, setDateTime] = useState<Dayjs>(dayjs());
@@ -94,7 +94,8 @@ export const SchedulePlanDialog: React.FC<SchedulePlanDialogProps> =
                     break;
             }
 
-            schedulePlan(planId, {
+            createScheduledPlan({
+                planId: planId,
                 type: type,
                 executeUtc: dateTime?.toISOString(),
                 cronExpressionUtc: cronExpression,
