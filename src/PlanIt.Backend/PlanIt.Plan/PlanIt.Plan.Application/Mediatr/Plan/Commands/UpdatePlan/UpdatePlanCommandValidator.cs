@@ -17,6 +17,6 @@ public class UpdatePlanCommandValidator : AbstractValidator<UpdatePlanCommand>
             .When(command => !string.IsNullOrWhiteSpace(command.ExecutionPath));
 
         RuleFor(command => command.UserId)
-            .NotEqual(Guid.NewGuid());
+            .NotEqual(Guid.Empty);
     }
 }

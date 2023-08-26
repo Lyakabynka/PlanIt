@@ -20,10 +20,8 @@ export const ENDPOINTS = {
     },
     SCHEDULED_PLAN: {
         CREATE_SCHEDULED_PLAN: `${API_URL}/scheduled-plan`,
-        DELETE_SCHEDULED_PLAN: `${API_URL}/{id:guid}`,
-        // GET_SCHEDULED_PLANS: `${API_URL}/{plan-id:guid}`
-
-
+        DELETE_SCHEDULED_PLAN: `${API_URL}/scheduled-plan/{id:guid}`,
+        GET_SCHEDULED_PLANS: `${API_URL}/scheduled-plans/{planId:guid}`
     }
 }
 

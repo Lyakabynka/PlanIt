@@ -5,6 +5,4 @@ export interface IScheduledPlan{
     hangfireId: string,
     executeUtc: string,
     cronExpressionUct: string,
-
-    planId: string,
 }

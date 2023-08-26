@@ -7,6 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/de';
 import { useSignalRStore } from '../entities/sharedStores/useSignalRStore';
 import { useAuthStore } from '../entities';
+import './App.css'
 
 function App() {
 
@@ -26,7 +27,7 @@ function App() {
       MuiCssBaseline: {
         styleOverrides: {
           body: {
-            backgroundColor: '#fff5d7',
+            backgroundColor: '#fff5d7'
           }
         }
       }

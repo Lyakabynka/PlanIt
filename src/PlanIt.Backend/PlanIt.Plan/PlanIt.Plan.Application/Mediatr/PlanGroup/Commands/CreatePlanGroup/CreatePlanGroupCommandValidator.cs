@@ -15,7 +15,7 @@ public class CreatePlanGroupCommandValidator : AbstractValidator<CreatePlanGroup
                 RuleFor(c => c.Name)
                     .MustAsync(async (name, cancellationToken) =>
                     {
-                        return await dbContext.PlanGroups.Where(pg => pg.Name == name).AnyAsync(cancellationToken);
+                        return !await dbContext.PlanGroups.Where(pg => pg.Name == name).AnyAsync(cancellationToken);
                     })
                     .WithMessage("PlanGroup with given name already exists");
             });

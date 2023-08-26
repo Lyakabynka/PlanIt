@@ -15,6 +15,6 @@ public class CreatePlanCommandValidator : AbstractValidator<CreatePlanCommand>
             
             .When(createPlanCommand => !string.IsNullOrWhiteSpace(createPlanCommand.ExecutionPath));
         RuleFor(createPlanCommand => createPlanCommand.UserId)
-            .NotEqual(Guid.NewGuid());
+            .NotEqual(Guid.Empty);
     }
 }

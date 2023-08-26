@@ -17,7 +17,7 @@ function generateCommands(
             case EnumPlanType.volume:
                 return ({
                     command: `${plan.name} *`,
-                    callback: (volume: string) => {         
+                    callback: (volume: string) => {
                         try {
                             const number = Number.parseInt(volume);
                             schedulePlan({
@@ -80,7 +80,7 @@ export const Listen = () => {
 
     const handleClick = () => {
         if (!listening) {
-            SpeechRecognition.startListening();
+            SpeechRecognition.startListening({continuous: true});
         }
         else {
             SpeechRecognition.stopListening();

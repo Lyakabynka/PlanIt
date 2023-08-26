@@ -1,9 +1,6 @@
-import { persist } from "zustand/middleware";
-import { EnumPlanType, ICreatePlanRequest, IPlan, ICreateScheduledPlanRequest, useAuthStore } from "../../entities";
+import {  ICreatePlanRequest, IPlan, ICreateScheduledPlanRequest, useAuthStore, IScheduledPlan } from "../../entities";
 import { create } from "zustand";
-import { AES, enc } from "crypto-js";
 import { $api, ENDPOINTS } from "../../shared";
-import * as signalR from '@microsoft/signalr'
 
 interface IPlanStore {
     isLoading: boolean;
@@ -69,5 +66,15 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
         set({isLoading: true});
 
         const response = await $api.delete<any>(ENDPOINTS.SCHEDULED_PLAN.DELETE_SCHEDULED_PLAN.replace('{id:guid}', id));
+
+        set({isLoading: false});
     },
+
+    getScheduledPlans: async (planId: string) => {
+        set({isLoading: true});
+
+        const response = await $api.get<IScheduledPlan[]>(ENDPOINTS.SCHEDULED_PLAN.GET_SCHEDULED_PLANS.replace('{planId:guid}', planId));
+
+        set({isLoading:false});
+    }
 }))

@@ -7,6 +7,4 @@ export interface IPlan{
     information: string,
     executionPath: string,
     type: string,
-
-    scheduledPlans: IScheduledPlan
 }

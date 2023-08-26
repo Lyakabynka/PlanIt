@@ -66,19 +66,6 @@
       "DownstreamPathTemplate": "/plans"
     },
     {
-      "UpstreamPathTemplate" : "/plan/{id:guid}/schedule",
-      "UpstreamHttpMethod": ["Post"],
-
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "planit.plan",
-          "Port": 80
-        }
-      ],
-      "DownstreamPathTemplate": "/plan/{id:guid}/schedule"
-    },
-    {
       "UpstreamPathTemplate" : "/plan",
       "UpstreamHttpMethod": ["Post"],
 
@@ -103,6 +90,47 @@
         }
       ],
       "DownstreamPathTemplate": "/plan/{id:guid}"
+    },
+    {
+      "UpstreamPathTemplate" : "/scheduled-plan",
+      "UpstreamHttpMethod": ["Post"],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/scheduled-plan"
+    },
+    {
+      "UpstreamPathTemplate": "/scheduled-plan/{id:guid}",
+      "UpstreamHttpMethod": [
+        "Delete"
+      ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/scheduled-plan/{id:guid}"
+    },
+    {
+      "UpstreamPathTemplate": "/scheduled-plans/{planId:guid}",
+      "UpstreamHttpMethod": [
+        "Get"
+      ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/scheduled-plans/{planId:guid}"
     }
   ],
   "GlobalConfiguration": {
