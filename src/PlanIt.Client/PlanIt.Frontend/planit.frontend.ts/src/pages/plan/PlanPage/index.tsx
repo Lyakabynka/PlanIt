@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { usePlanStore } from '../usePlanStore'
 import { IPlan, useAuthStore } from '../../../entities';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Container, Grid } from '@mui/material';
 import { AddPlanListenPlaceHolder, PlanCard } from "../../../features";
 
 
@@ -20,9 +20,11 @@ export const PlanPage = () => {
                     <CircularProgress />
                 </Box>
                 :
-                plans?.map((plan: IPlan) => {
-                    return <PlanCard key={plan.id} plan={plan} />
-                })
+                <Box>
+                    {plans?.map((plan: IPlan) => {
+                        return <PlanCard key={plan.id} plan={plan} />
+                    })}
+                </Box>
             }
             <AddPlanListenPlaceHolder />
         </>

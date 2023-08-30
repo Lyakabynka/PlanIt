@@ -75,7 +75,8 @@ export const PlanCard: React.FC<IPlanProps> = ({ plan }) => {
                             color: 'primary.contrastText',
                             textAlign: 'center',
                             verticalAlign: 'center',
-                            opacity: 0.9
+                            opacity: 0.9,
+                            wordWrap: 'break-word'
                         }}>
                         {plan.information}
                     </Typography>
