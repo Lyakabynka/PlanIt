@@ -1,4 +1,4 @@
-import { IScheduledPlan } from "./scheduledPlan";
+import { IScheduledPlan } from "../scheduledPlan/scheduledPlan";
 
 export interface IPlan{
     id: string,

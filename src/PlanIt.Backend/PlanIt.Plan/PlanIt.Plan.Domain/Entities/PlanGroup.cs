@@ -3,7 +3,7 @@
 public class PlanGroup : BaseEntity
 {
     public string Name { get; set; }
-    public List<Plan> Plans { get; set; }
+    public List<PlanPlanGroup> PlanPlanGroups { get; set; }
     
     public Guid UserId { get; set; }
  

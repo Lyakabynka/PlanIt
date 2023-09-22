@@ -28,9 +28,7 @@ public class UpdatePlanCommandHandler : IRequestHandler<UpdatePlanCommand, Resul
             .Where(plan => plan.Id == request.PlanId)
             .Include(plan => plan.ScheduledPlans)
             .AsTracking()
-            .FirstOrDefaultAsync(cancellationToken);
-        if (plan is null)
-            return Result.FormNotFound("Plan does not exist");
+            .FirstAsync(cancellationToken);
 
         if (plan.UserId != request.UserId) 
             return Result.FormForbidden();
@@ -45,10 +43,10 @@ public class UpdatePlanCommandHandler : IRequestHandler<UpdatePlanCommand, Resul
         {
             switch (scheduledPlan.Type)
             {
-                case ScheduledPlanType.OneOff:
+                case ScheduleType.OneOff:
                     _backgroundJobClient.Delete(scheduledPlan.HangfireId);
                     break;
-                case ScheduledPlanType.Recurring:
+                case ScheduleType.Recurring:
                     _recurringJobClient.RemoveIfExists(scheduledPlan.HangfireId);
                     break;
             }

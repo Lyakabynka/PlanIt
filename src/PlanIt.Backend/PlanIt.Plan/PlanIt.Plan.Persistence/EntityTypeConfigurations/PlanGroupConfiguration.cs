@@ -9,8 +9,9 @@ public class PlanGroupConfiguration : IEntityTypeConfiguration<PlanGroup>
     public void Configure(EntityTypeBuilder<PlanGroup> builder)
     {
         builder.HasIndex(pg => pg.Id);
-        builder
-            .HasMany(pg => pg.Plans)
-            .WithMany(p => p.PlanGroups);
+        
+        builder.HasMany(p => p.PlanPlanGroups)
+            .WithOne(ppg => ppg.PlanGroup)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

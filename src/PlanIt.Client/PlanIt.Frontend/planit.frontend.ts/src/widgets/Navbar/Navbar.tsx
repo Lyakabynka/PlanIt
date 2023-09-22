@@ -7,14 +7,15 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
+import PersonIcon from '@mui/icons-material/Person';
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState } from "react";
 import { EnumUserRole, useAuthStore } from "../../entities";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { NavbarPlanItIcon } from "./NavbarPlanItIcon";
+import Person from "@mui/icons-material/Person";
 // import './Navbar.module.scss'
 
 interface INavItem {
@@ -37,6 +38,7 @@ export function Navbar() {
             case EnumUserRole.user:
                 setMainNavItems([
                     { path: '/plans', pathName: 'Plans' },
+                    { path: '/plan-groups', pathName: 'Groups' }
                 ])
                 break;
             default:
@@ -90,7 +92,6 @@ export function Navbar() {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -98,10 +99,14 @@ export function Navbar() {
                             letterSpacing: '.2rem',
                             color: 'primary.contrastText',
                             textDecoration: 'none',
-                            caretColor: 'transparent'
+                            caretColor: 'transparent',
                         }}
                     >
-                        PLANIT
+                        <Link
+                            style={{ textAlign: 'center', color: 'inherit', textDecoration: 'none' }}
+                            to='/'>
+                            PLANIT
+                        </Link>
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -165,7 +170,11 @@ export function Navbar() {
                             textDecoration: 'none',
                         }}
                     >
-                        PLANIT
+                        <Link
+                            style={{ textAlign: 'center', color: 'inherit', textDecoration: 'none' }}
+                            to='/'>
+                            PLANIT
+                        </Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {mainNavItems.map((item) => (
@@ -187,8 +196,11 @@ export function Navbar() {
                     {isLoggedIn &&
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                <IconButton onClick={handleOpenUserMenu} sx={{
+                                    color: 'primary.contrastText',
+                                    margin: 0,
+                                }}>
+                                    <Person fontSize="large"/>
                                 </IconButton>
                             </Tooltip>
                             <Menu

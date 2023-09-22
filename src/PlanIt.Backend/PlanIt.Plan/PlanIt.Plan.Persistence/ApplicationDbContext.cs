@@ -10,6 +10,7 @@ namespace PlanIt.Plan.Persistence
         public DbSet<Domain.Entities.Plan> Plans { get; set; }
         public DbSet<ScheduledPlan> ScheduledPlans { get; set; }
         public DbSet<PlanGroup> PlanGroups { get; set; }
+        public DbSet<PlanPlanGroup> PlanPlanGroups { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

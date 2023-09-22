@@ -41,10 +41,10 @@ public class DeleteSchedulePlanCommandHandler : IRequestHandler<DeleteScheduledP
         _dbContext.ScheduledPlans.Remove(scheduledPlan);
         switch (scheduledPlan.Type)
         {
-            case ScheduledPlanType.OneOff:
+            case ScheduleType.OneOff:
                 _backgroundJobClient.Delete(scheduledPlan.HangfireId);
                 break;
-            case ScheduledPlanType.Recurring:
+            case ScheduleType.Recurring:
                 _recurringJobManager.RemoveIfExists(scheduledPlan.HangfireId);
                 break;
         }

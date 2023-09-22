@@ -24,6 +24,11 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-preview.5.23280.1"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.4"/>
+        <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="7.100.0.1" />
+
+
+
+
 
 
 

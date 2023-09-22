@@ -8,7 +8,7 @@ namespace PlanIt.RabbitMq;
 public class ScheduledPlanProcessed
 {
     public Guid ScheduledPlanId { get; set; }
-    public ScheduledPlanType ScheduledPlanType { get; set; }
+    public ScheduleType ScheduleType { get; set; }
 }
 
 public class ScheduledPlanProcessedConsumer : IConsumer<ScheduledPlanProcessed>
@@ -22,7 +22,7 @@ public class ScheduledPlanProcessedConsumer : IConsumer<ScheduledPlanProcessed>
 
     public async Task Consume(ConsumeContext<ScheduledPlanProcessed> context)
     {
-        if (context.Message.ScheduledPlanType == ScheduledPlanType.OneOff)
+        if (context.Message.ScheduleType == ScheduleType.OneOff)
         {
             await _dbContext.ScheduledPlans
                 .Where(scheduledPlan => scheduledPlan.Id == context.Message.ScheduledPlanId)

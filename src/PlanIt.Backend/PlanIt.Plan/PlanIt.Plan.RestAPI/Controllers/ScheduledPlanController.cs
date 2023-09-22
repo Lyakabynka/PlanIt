@@ -14,14 +14,12 @@ public class ScheduledPlanController : ApiControllerBase
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// POST /plans/scheduled/048fbe34-410c-4ff8-a641-2077a2f09a54
+    /// POST /scheduled-plan
     /// </remarks>
-    /// <param name="id">Id of the Plan to schedule</param>
     /// <param name="requestModel">SchedulePlanRequestModel with necessary fields</param>
     /// <response code="200">Success</response>
     /// <response code="401">User is not authorized</response>
     /// <response code="403">User is forbidden</response>
-    /// <response code="404">Plan was not found</response>
     /// <response code="400">Request does not have the valid format</response>
     /// <response code="406">Validation error</response>
     [Authorize]
@@ -57,7 +55,6 @@ public class ScheduledPlanController : ApiControllerBase
     /// <response code="200">Success</response>
     /// <response code="401">User is not authorized</response>
     /// <response code="403">User is forbidden</response>
-    /// <response code="404">Plan was not found</response>
     /// <response code="400">Request does not have the valid format</response>
     /// <response code="406">Validation error</response>
     [Authorize]

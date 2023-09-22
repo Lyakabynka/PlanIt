@@ -1,7 +1,9 @@
-import { Box, Card, CardContent, Typography, Button, CardActions } from '@mui/material'
+import { Box, Card, CardContent, Typography, Button, CardActions, IconButton } from '@mui/material'
 import React from 'react'
 import { IPlanGroup } from '../../../entities/models/planGroup/planGroup'
-import { usePlanStore } from '../../../pages/plan/usePlanStore'
+import { PlanGroupCardDropDown } from './PlanGroupCardDropDown'
+import AddIcon from '@mui/icons-material/Add';
+import { useNavigate } from 'react-router-dom';
 
 interface IPlanGroupProps {
     planGroup: IPlanGroup
@@ -9,7 +11,17 @@ interface IPlanGroupProps {
 
 export const PlanGroupCard: React.FC<IPlanGroupProps> = ({ planGroup }) => {
 
-    
+    const navigate = useNavigate();
+
+    const [openSchedulePlanGroupDialog, setOpenSchedulePlanGroupDialog] = React.useState<boolean>(false);
+
+    const handleOpenSchedulePlanGroupDialog = () => {
+        setOpenSchedulePlanGroupDialog(true);
+    }
+
+    const handleOpenAddPlanToPlanGroup = () => {
+        navigate(`/plan-groups/${planGroup.id}`);
+    }
 
     return (
         <Box sx={{
@@ -30,6 +42,7 @@ export const PlanGroupCard: React.FC<IPlanGroupProps> = ({ planGroup }) => {
                 }}
                 id={planGroup.id}>
                 <CardContent>
+                    <PlanGroupCardDropDown planGroupId={planGroup.id} />
                     <Typography
                         variant="h6"
                         component="div"
@@ -41,6 +54,22 @@ export const PlanGroupCard: React.FC<IPlanGroupProps> = ({ planGroup }) => {
                         }}>
                         {planGroup.name}
                     </Typography>
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{
+                            color: 'primary.contrastText',
+                            textAlign: 'center',
+                            verticalAlign: 'center',
+                            height: 30,
+                        }}>
+                        Plans: {planGroup.planCount}
+                    </Typography>
+                    <IconButton sx={{
+
+                    }} onClick={handleOpenAddPlanToPlanGroup}>
+                        <AddIcon />
+                    </IconButton>
                 </CardContent>
                 <CardActions sx={{
                     padding: 0,
@@ -61,13 +90,13 @@ export const PlanGroupCard: React.FC<IPlanGroupProps> = ({ planGroup }) => {
                             borderBottomLeftRadius: 12,
                             borderBottomRightRadius: 12,
                         }}
-                        onClick={}
+                        onClick={handleOpenSchedulePlanGroupDialog}
                     >
                         Schedule
                     </Button>
                 </CardActions>
             </Card>
-
+            {/* scheduleplangroupdialog */}
         </Box >
     )
 }

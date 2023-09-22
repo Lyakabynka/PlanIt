@@ -13,7 +13,7 @@ public class Plan : BaseEntity
     
     public List<ScheduledPlan> ScheduledPlans { get; set; }
     
-    public List<PlanGroup> PlanGroups { get; set; }
+    public List<PlanPlanGroup> PlanPlanGroups { get; set; }
 
     public Guid UserId { get; set; }
 }

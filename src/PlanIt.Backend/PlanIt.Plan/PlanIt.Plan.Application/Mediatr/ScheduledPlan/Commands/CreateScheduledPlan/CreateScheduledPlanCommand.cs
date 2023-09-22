@@ -40,5 +40,5 @@ public class CreateScheduledPlanCommand : IValidatableRequest<Result>
     /// Specifies, how plan should be scheduled.
     /// Currently supported: Instant, OneOff, Recurring.
     /// </summary>
-    public ScheduledPlanType Type { get; set; }
+    public ScheduleType Type { get; set; }
 }

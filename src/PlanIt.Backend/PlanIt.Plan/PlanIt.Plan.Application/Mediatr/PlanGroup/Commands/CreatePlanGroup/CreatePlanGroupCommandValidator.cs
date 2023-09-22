@@ -12,12 +12,15 @@ public class CreatePlanGroupCommandValidator : AbstractValidator<CreatePlanGroup
             .Length(4, 40)
             .DependentRules(() =>
             {
-                RuleFor(c => c.Name)
-                    .MustAsync(async (name, cancellationToken) =>
+                RuleFor(c => c)
+                    .MustAsync(async (c, cancellationToken) =>
                     {
-                        return !await dbContext.PlanGroups.Where(pg => pg.Name == name).AnyAsync(cancellationToken);
+                        return !await dbContext.PlanGroups
+                            .Where(pg => pg.UserId == c.UserId && pg.Name == c.Name)
+                            .AnyAsync(cancellationToken);
                     })
-                    .WithMessage("PlanGroup with given name already exists");
+                    .WithMessage("PlanGroup already exists")
+                    .WithName("Name");
             });
     }
 }

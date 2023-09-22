@@ -6,7 +6,7 @@ public class SchedulePlanRequestModel
 {
     public Guid PlanId { get; set; }
     
-    public ScheduledPlanType Type { get; set; }
+    public ScheduleType Type { get; set; }
     
     public string? CronExpressionUtc { get; set; }
     public DateTime? ExecuteUtc { get; set; }

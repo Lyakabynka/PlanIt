@@ -5,7 +5,7 @@ namespace PlanIt.RabbitMq;
 public class ScheduledPlanTriggered
 {
     public Guid ScheduledPlanId { get; set; }
-    public ScheduledPlanType ScheduledPlanType { get; set; }
+    public ScheduleType ScheduleType { get; set; }
     
     public Guid Id { get; set; }
     

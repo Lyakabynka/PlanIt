@@ -19,5 +19,9 @@ public class PlanConfiguration : IEntityTypeConfiguration<Domain.Entities.Plan>
             .HasConversion(
                 t => t.ToString(),
                 t => Enum.Parse<PlanType>(t));
+
+        builder.HasMany(p => p.PlanPlanGroups)
+            .WithOne(ppg => ppg.Plan)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -5,9 +5,10 @@ import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/de';
-import { useSignalRStore } from '../entities/sharedStores/useSignalRStore';
+import { useSignalRStore } from '../entities/index';
 import { useAuthStore } from '../entities';
 import './App.css'
+import backgroundImage from '../background.svg';
 
 function App() {
 
@@ -50,8 +51,18 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='de'>
-        <Navbar />
-        <Routing />
+        <div style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // or 'contain' depending on your preference
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed', // Optional: Makes the background image fixed
+          minHeight: '100vh', // Ensures the background covers the entire viewport
+          backgroundPosition: 'center top 0px',
+          
+        }}>
+          <Navbar />
+          <Routing />
+        </div>
       </LocalizationProvider>
     </ThemeProvider>
   );

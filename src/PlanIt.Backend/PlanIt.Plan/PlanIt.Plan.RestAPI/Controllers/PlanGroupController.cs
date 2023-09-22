@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PlanIt.Plan.Application.Mediatr.PlanGroup.Commands.AddPlanToPlanGroup;
 using PlanIt.Plan.Application.Mediatr.PlanGroup.Commands.CreatePlanGroup;
+using PlanIt.Plan.Application.Mediatr.PlanGroup.Commands.DeletePlanGroup;
+using PlanIt.Plan.Application.Mediatr.PlanGroup.Commands.SetPlansToPlanGroup;
+using PlanIt.Plan.Application.Mediatr.PlanGroup.Queries.GetPlanGroup;
 using PlanIt.Plan.Application.Mediatr.PlanGroup.Queries.GetPlanGroups;
 using PlanIt.Plan.RestAPI.Models;
 
@@ -22,20 +24,20 @@ public class PlanGroupController : ApiControllerBase
     /// <response code="406">Validation error</response>
     [Authorize]
     [HttpGet("plan-groups")]
-    [ProducesResponseType(typeof(List<Domain.Entities.Plan>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(List<Domain.Entities.PlanGroup>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
     public async Task<IActionResult> GetPlanGroups()
     {
-        var request = new GetPlanGroupsCommand()
+        var request = new GetPlanGroupVmsCommand()
         {
             UserId = UserId
         };
 
         return await Mediator.Send(request);
     }
-    
+
     /// <summary>
     /// Create PlanGroup
     /// </summary>
@@ -49,15 +51,15 @@ public class PlanGroupController : ApiControllerBase
     /// <response code="406">Validation error</response>
     [Authorize]
     [HttpPost("plan-group")]
-    [ProducesResponseType(typeof(List<Domain.Entities.Plan>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(PlanGroupFullVm), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
     public async Task<IActionResult> CreatePlanGroup([FromBody] CreatePlanGroupRequestModel requestModel)
     {
         var request = new CreatePlanGroupCommand()
         {
-            Name = requestModel.Name,
+            Name = requestModel.Name.Trim(),
             UserId = UserId
         };
 
@@ -65,29 +67,90 @@ public class PlanGroupController : ApiControllerBase
     }
 
     /// <summary>
-    /// Add Plan to PlanGroup
+    /// Set plans to plangroup
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// POST /plan-group/add
+    /// POST /plan-group/048fbe34-410c-4ff8-a641-2077a2f09a54/plans
     /// </remarks>
     /// <response code="200">Success</response>
     /// <response code="401">User is not authorized</response>
-    /// <response code="403">User is not forbidden</response>
+    /// <response code="403">User is forbidden</response>
     /// <response code="400">Request does not have the valid format</response>
     /// <response code="406">Validation error</response>
     [Authorize]
-    [HttpGet("plan-group/add")]
-    [ProducesResponseType(typeof(List<Domain.Entities.Plan>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost("plan-group/{id:guid}/plans")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> AddPlanToPlanGroup([FromBody] AddPlanToPlanGroupRequestModel requestModel)
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+    public async Task<IActionResult> SetPlansToPlanGroup(
+        [FromRoute] Guid id,
+        [FromBody] List<SetPlanToPlanGroupRequestModel> requestModels)
     {
-        var request = new AddPlanToPlanGroupCommand()
+        var request = new SetPlansToPlanGroupCommand()
         {
-            PlanId = requestModel.PlanId,
-            PlanGroupId = requestModel.PlanGroupId,
+            SetPlanToPlanGroupRequestModels = requestModels,
+            PlanGroupId = id,
+            UserId = UserId
+        };
+
+        return await Mediator.Send(request);
+    }
+
+    /// <summary>
+    /// Delete PlanGroup
+    /// </summary>
+    /// <remarks>
+    /// Sample request:
+    /// DELETE /plan-group/048fbe34-410c-4ff8-a641-2077a2f09a54
+    /// </remarks>
+    /// <response code="200">Success</response>
+    /// <response code="401">User is not authorized</response>
+    /// <response code="403">User is forbidden</response>
+    /// <response code="400">Request does not have the valid format</response>
+    /// <response code="406">Validation error</response>
+    [Authorize]
+    [HttpDelete("plan-group/{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+    public async Task<IActionResult> DeletePlanGroup([FromRoute] Guid id)
+    {
+        var request = new DeletePlanGroupCommand()
+        {
+            PlanGroupId = id,
+            UserId = UserId,
+        };
+
+        return await Mediator.Send(request);
+    }
+
+    /// <summary>
+    /// Gets Plans in specific PlanGroup
+    /// </summary>
+    /// <remarks>
+    /// Sample request:
+    /// GET /plan-group/048fbe34-410c-4ff8-a641-2077a2f09a54
+    /// </remarks>
+    /// <response code="200">Success</response>
+    /// <response code="401">User is not authorized</response>
+    /// <response code="403">User is forbidden</response>
+    /// <response code="400">Request does not have the valid format</response>
+    /// <response code="406">Validation error</response>
+    [Authorize]
+    [HttpGet("plan-group/{id:guid}")]
+    [ProducesResponseType(typeof(List<PlanPlanGroupVm>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+    public async Task<IActionResult> GetPlanGroup([FromRoute] Guid id)
+    {
+        var request = new GetPlanGroupCommand()
+        {
+            PlanGroupId = id,
             UserId = UserId
         };
 

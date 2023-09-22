@@ -1,5 +1,6 @@
 {
   "Routes" : [
+    
     {
       "UpstreamPathTemplate" : "/auth/login",
       "UpstreamHttpMethod": ["Post"],
@@ -52,6 +53,7 @@
       ],
       "DownstreamPathTemplate": "/user/register"
     },
+    
     {
       "UpstreamPathTemplate" : "/plans",
       "UpstreamHttpMethod": ["Get"],
@@ -106,9 +108,7 @@
     },
     {
       "UpstreamPathTemplate": "/scheduled-plan/{id:guid}",
-      "UpstreamHttpMethod": [
-        "Delete"
-      ],
+      "UpstreamHttpMethod": ["Delete"],
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -120,9 +120,7 @@
     },
     {
       "UpstreamPathTemplate": "/scheduled-plans/{planId:guid}",
-      "UpstreamHttpMethod": [
-        "Get"
-      ],
+      "UpstreamHttpMethod": ["Get"],
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -131,6 +129,66 @@
         }
       ],
       "DownstreamPathTemplate": "/scheduled-plans/{planId:guid}"
+    },
+    {
+      "UpstreamPathTemplate": "/plan-groups",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plan-groups"
+    },
+    {
+      "UpstreamPathTemplate": "/plan-group",
+      "UpstreamHttpMethod": ["Post"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plan-group"
+    },
+    {
+      "UpstreamPathTemplate": "/plan-group/{id:guid}",
+      "UpstreamHttpMethod": ["Delete"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plan-group/{id:guid}"
+    },
+    {
+      "UpstreamPathTemplate": "/plan-group/{id:guid}/plans",
+      "UpstreamHttpMethod": ["Post"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plan-group/{id:guid}/plans"
+    },
+    {
+      "UpstreamPathTemplate": "/plan-group/{id:guid}",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/plan-group/{id:guid}"
     }
   ],
   "GlobalConfiguration": {

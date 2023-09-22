@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using PlanIt.Plan.Application.Features.Interfaces;
+using PlanIt.Plan.Application.Mediatr.PlanGroup.Queries.GetPlanGroups;
+using PlanIt.Plan.Application.Mediatr.PlanGroup.ViewModels;
 using PlanIt.Plan.Application.Response;
 
 namespace PlanIt.Plan.Application.Mediatr.PlanGroup.Commands.CreatePlanGroup;
@@ -26,6 +28,11 @@ public class CreatePlanGroupCommandHandler : IRequestHandler<CreatePlanGroupComm
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return Result.Create(planGroup);
+        return Result.Create(new PlanGroupVm()
+        {
+            Id = planGroup.Id,
+            Name = planGroup.Name,
+            PlanCount = 0
+        });
     }
 }

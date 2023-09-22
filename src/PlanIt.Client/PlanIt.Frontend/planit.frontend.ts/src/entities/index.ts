@@ -15,6 +15,8 @@ export type { ILoginRequest } from './requests/auth/ILoginRequest';
 export type { IRegisterRequest } from './requests/auth/IRegisterRequest'
 export type { ICreatePlanRequest } from './requests/plan/ICreatePlanRequest'
 export type { ICreateScheduledPlanRequest } from './requests/scheduledPlan/ICreateScheduledPlanRequest'
+export type { ICreatePlanGroupRequest } from './requests/planGroup/ICreatePlanGroupRequest'
+export type { ISetPlanToPlanGroupRequestModel } from './requests/planGroup/ISetPlanToPlanGroupRequest'
 
 ////////////////////////////////////
 //////////// RESPONSES /////////////
@@ -27,11 +29,13 @@ export type { IUserData } from './responses/shared/IUserData'
 ////////////////////////////////////
 
 export { useAuthStore } from './sharedStores/useAuthStore';
-export {useSignalRStore} from './sharedStores/useSignalRStore';
+export { useSignalRStore } from './sharedStores/useSignalRStore';
 
 ////////////////////////////////////
 //////////// MODELS /////////////
 ////////////////////////////////////
 
 export type { IPlan } from './models/plan/plan'
-export type { IScheduledPlan } from './models/plan/scheduledPlan'
+export type { IScheduledPlan } from './models/scheduledPlan/scheduledPlan'
+export type { IPlanGroup } from './models/planGroup/planGroup'
+export type { IPlanPlanGroup } from './models/planGroup/planPlanGroup'

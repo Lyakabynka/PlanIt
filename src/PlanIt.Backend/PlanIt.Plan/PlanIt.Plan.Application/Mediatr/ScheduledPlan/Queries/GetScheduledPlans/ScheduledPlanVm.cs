@@ -6,7 +6,7 @@ public class ScheduledPlanVm
 {
     public Guid Id { get; set; }
     
-    public ScheduledPlanType Type { get; set; }
+    public ScheduleType Type { get; set; }
     
     public DateTime? ExecuteUtc { get; set; }
     public string? CronExpressionUtc { get; set; }

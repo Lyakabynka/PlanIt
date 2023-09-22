@@ -31,6 +31,8 @@ builder.Services.AddAuthentication(config =>
     })
     .AddJwtBearer();
 
+builder.Services.AddLogging();
+
 builder.Services.AddApplication();
 builder.Services.AddPersistence();
 

@@ -34,7 +34,7 @@ public class PlanController : ApiControllerBase
     {
         var request = new CreatePlanCommand()
         {
-            Name = requestModel.Name,
+            Name = requestModel.Name.Trim(),
             Information = requestModel.Information,
             ExecutionPath = requestModel.ExecutionPath,
             Type = requestModel.Type,
@@ -57,7 +57,6 @@ public class PlanController : ApiControllerBase
     /// <response code="200">Success</response>
     /// <response code="401">User is not authorized</response>
     /// <response code="403">User is forbidden</response>
-    /// <response code="404">Plan was not found</response>
     /// <response code="400">Request does not have the valid format</response>
     /// <response code="406">Validation error</response>
     [Authorize]
@@ -66,12 +65,13 @@ public class PlanController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
     public async Task<IActionResult> UpdatePlan([FromRoute] Guid id, [FromBody] UpdatePlanRequestModel requestModel)
     {
         var request = new UpdatePlanCommand()
         {
             PlanId = id,
-            Name = requestModel.Name,
+            Name = requestModel.Name.Trim(),
             Information = requestModel.Information,
             ExecutionPath = requestModel.ExecutionPath,
             Type = requestModel.Type,
@@ -92,7 +92,6 @@ public class PlanController : ApiControllerBase
     /// <response code="200">Success</response>
     /// <response code="401">User is not authorized</response>
     /// <response code="403">User is forbidden</response>
-    /// <response code="404">Plan was not found</response>
     /// <response code="400">Request does not have the valid format</response>
     /// <response code="406">Validation error</response>
     [Authorize]
@@ -101,7 +100,8 @@ public class PlanController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> DeletePlan(Guid id)
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+    public async Task<IActionResult> DeletePlan([FromRoute] Guid id)
     {
         var request = new DeletePlanCommand()
         {
@@ -129,6 +129,7 @@ public class PlanController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
     public async Task<IActionResult> GetPlans()
     {
         var request = new GetPlansQuery()

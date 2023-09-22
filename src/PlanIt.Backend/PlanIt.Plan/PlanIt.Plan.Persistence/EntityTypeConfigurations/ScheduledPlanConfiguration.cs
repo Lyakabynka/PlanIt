@@ -13,6 +13,6 @@ public class ScheduledPlanConfiguration : IEntityTypeConfiguration<ScheduledPlan
         builder.Property(sp => sp.Type)
             .HasConversion(
                 t => t.ToString(),
-                t => Enum.Parse<ScheduledPlanType>(t));
+                t => Enum.Parse<ScheduleType>(t));
     }
 }

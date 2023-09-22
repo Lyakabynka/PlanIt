@@ -41,11 +41,11 @@ public class CreateScheduledPlanCommandHandler :
         string? hangfireId = null;
         switch (request.Type)
         {
-            case ScheduledPlanType.Instant:
+            case ScheduleType.Instant:
                 await _publishHelper.PublishScheduledPlanTriggered(new ScheduledPlanTriggered()
                 {
                     ScheduledPlanId = scheduledPlanId,
-                    ScheduledPlanType = request.Type,
+                    ScheduleType = request.Type,
                     Id = plan.Id,
                     Name = plan.Name,
                     //If arguments are not null, substitute information with arguments
@@ -55,7 +55,7 @@ public class CreateScheduledPlanCommandHandler :
                     UserId = plan.UserId
                 }, cancellationToken);
                 break;
-            case ScheduledPlanType.OneOff
+            case ScheduleType.OneOff
                 when request.ExecuteUtc is not null:
                 hangfireId =
                     _backgroundJobClient.Schedule(
@@ -65,7 +65,7 @@ public class CreateScheduledPlanCommandHandler :
                                 new ScheduledPlanTriggered()
                                 {
                                     ScheduledPlanId = scheduledPlanId,
-                                    ScheduledPlanType = request.Type,
+                                    ScheduleType = request.Type,
                                     Id = plan.Id,
                                     Name = plan.Name,
                                     Information = plan.Information,
@@ -84,7 +84,7 @@ public class CreateScheduledPlanCommandHandler :
                     PlanId = plan.Id
                 });
                 break;
-            case ScheduledPlanType.Recurring
+            case ScheduleType.Recurring
                 when request.CronExpressionUtc is not null:
 
                 hangfireId = scheduledPlanId.ToString();
@@ -97,7 +97,7 @@ public class CreateScheduledPlanCommandHandler :
                             new ScheduledPlanTriggered()
                             {
                                 ScheduledPlanId = scheduledPlanId,
-                                ScheduledPlanType = request.Type,
+                                ScheduleType = request.Type,
                                 Id = plan.Id,
                                 Name = plan.Name,
                                 Information = plan.Information,

@@ -33,7 +33,7 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
     deletePlan: async (id: string) => {
         await $api.delete(ENDPOINTS.PLAN.DELETE_PLAN.replace('{id:guid}', id));
         
-        set({ plans: get().plans?.filter(plan => plan.id != id) });
+        set({ plans: get().plans?.filter(plan => plan.id !== id) });
     },
 
     addPlan: async (params: ICreatePlanRequest) => {

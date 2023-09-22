@@ -26,7 +26,9 @@ export const ENDPOINTS = {
     PLANGROUP: {
         GET_PLANGROUPS: `${API_URL}/plan-groups`,
         CREATE_PLANGROUP: `${API_URL}/plan-group`,
-        ADD_PLAN_TO_PLANGROUP: `${API_URL}/plan-group/add`
+        SET_PLANS_TO_PLANGROUP: `${API_URL}/plan-group/{id:guid}/plans`,
+        DELETE_PLANGROUP: `${API_URL}/plan-group/{id:guid}`,
+        GET_PLANGROUP: `${API_URL}/plan-group/{id:guid}`
     }
 }
 

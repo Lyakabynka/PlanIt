@@ -27,22 +27,19 @@ public class DeletePlanCommandHandler : IRequestHandler<DeletePlanCommand, Resul
         var plan = await _dbContext.Plans
             .Where(plan => plan.Id == request.PlanId)
             .Include(plan=>plan.ScheduledPlans)
-            .FirstOrDefaultAsync(cancellationToken);
-        if (plan is null)
-            return Result.FormNotFound("Plan does not exist");
+            .FirstAsync(cancellationToken);
 
         if (plan.UserId != request.UserId) return Result.FormForbidden();
-
         // deleting scheduled/recurring jobs from hangfire
 
         foreach (var scheduledPlan in plan.ScheduledPlans)
         {
             switch (scheduledPlan.Type)
             {
-                case ScheduledPlanType.OneOff:
+                case ScheduleType.OneOff:
                     _backgroundJobClient.Delete(scheduledPlan.HangfireId);
                     break;
-                case ScheduledPlanType.Recurring:
+                case ScheduleType.Recurring:
                     _recurringJobClient.RemoveIfExists(scheduledPlan.HangfireId);
                     break;
             }

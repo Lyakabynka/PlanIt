@@ -1,13 +1,12 @@
-﻿using PlanIt.Plan.Domain.Enums;
+﻿using PlanIt.Plan.Domain.Contracts;
+using PlanIt.Plan.Domain.Enums;
 
 namespace PlanIt.Plan.Domain.Entities;
 
-public class ScheduledPlan : BaseEntity
+public class ScheduledPlan : BaseEntity, IScheduled
 {
-    public ScheduledPlanType Type { get; set; }
-    
+    public ScheduleType Type { get; set; }
     public string? HangfireId { get; set; }
-    
     public DateTime? ExecuteUtc { get; set; }
     public string? CronExpressionUtc { get; set; }
 
