@@ -17,6 +17,7 @@ export type { ICreatePlanRequest } from './requests/plan/ICreatePlanRequest'
 export type { ICreateScheduledPlanRequest } from './requests/scheduledPlan/ICreateScheduledPlanRequest'
 export type { ICreatePlanGroupRequest } from './requests/planGroup/ICreatePlanGroupRequest'
 export type { ISetPlanToPlanGroupRequestModel } from './requests/planGroup/ISetPlanToPlanGroupRequest'
+export type {IPlanSchedule} from './models/plan/planSchedule'
 
 ////////////////////////////////////
 //////////// RESPONSES /////////////

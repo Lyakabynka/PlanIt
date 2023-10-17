@@ -12,6 +12,7 @@ import { EnumUserRole } from "../../entities";
 import { RegisterPage } from "../../pages";
 import { LogoutPage } from "../../pages";
 import { ManagePlanGroupPage } from '../../pages';
+import { ScheduledPlanPage } from '../../pages/plan/ScheduledPlanPage';
 
 export const Routing = () => {
     return (
@@ -34,6 +35,12 @@ export const Routing = () => {
             <Route path="plan-groups/:id" element={
                 <PrivateRoute requiredRole={EnumUserRole.user}>
                     <ManagePlanGroupPage />
+                </PrivateRoute>
+            } />
+
+            <Route path="plans/:id/scheduled" element={
+                <PrivateRoute requiredRole={EnumUserRole.user}>
+                    <ScheduledPlanPage />
                 </PrivateRoute>
             } />
         </Routes >

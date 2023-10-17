@@ -46,6 +46,11 @@ export const ManagePlanGroupPage = () => {
     useEffect(() => {
         $api.get(ENDPOINTS.PLANGROUP.GET_PLANGROUP.replace(`{id:guid}`, String(id)))
             .then((response) => {
+
+                if (response.status !== 200) {
+                    navigate('/');
+                }
+
                 console.log(response.data);
 
                 setPlanGroup(response.data);
@@ -87,7 +92,12 @@ export const ManagePlanGroupPage = () => {
     }
 
     const handlePlanPlanGroupsDoubleClicked = (e: RowDoubleClickedEvent<IPlanPlanGroup, any>) => {
-        setPlanGroup({ ...planGroup!, planPlanGroups: planGroup!.planPlanGroups.filter(pg => pg.id != e.node.data!.id) })
+        setPlanGroup({ ...planGroup!, planPlanGroups: planGroup!.planPlanGroups.filter(pg => {
+            console.log(pg.id);
+            console.log(e.node.data?.id);
+            
+            return pg.id != e.node.data!.id
+        })})
     }
 
     const plansInGroupColumnDefs: ColDef<IPlanPlanGroup>[] = [
@@ -125,10 +135,28 @@ export const ManagePlanGroupPage = () => {
 
     return (
         <>
-            <div style={{
-                padding: 10
-            }}>
-                {planGroup?.name}
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginBottom: '-25px',
+                    marginTop: '20px'
+                }}>
+                <Typography sx={{
+                    textAlign: "center",
+                    color: "primary.main",
+                    fontSize: 38,
+                    fontWeight: 600,
+                    letterSpacing: '.05rem',
+                    textDecoration: 'none',
+                    caretColor: 'transparent',
+                    padding: '3px 20px 3px 20px',
+                    backgroundColor: 'rgba(255,245,215)',
+                    display: 'inline-block',
+                    borderRadius: '23px',
+                }}>
+                    {planGroup?.name}
+                </Typography>
             </div>
             <div style={{
                 width: '100%',

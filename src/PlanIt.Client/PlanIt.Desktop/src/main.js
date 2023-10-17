@@ -50,8 +50,8 @@ app.whenReady().then(() => {
 })
 
 app.on('ready', () => {
-    ipcMain.on('process_plan_desktop', async (event, plan) => {
-        switch (plan.planType) {
+    ipcMain.on(CHANNELS.PROCESS_PLAN_DESKTOP, async (event, plan) => {
+        switch (plan.type) {
             //notification
             case EnumPlanType.notification:
                 new Notification({
@@ -73,9 +73,41 @@ app.on('ready', () => {
                 break;
             //
             case EnumPlanType.focusOn:
-                
+
                 break;
         }
+    })
+
+    ipcMain.on(CHANNELS.PROCESS_PLANGROUP_DESKTOP, async (event, planPlanGroups) => {
+
+        planPlanGroups.forEach(ppg => {
+            switch (ppg.plan.type) {
+                //notification
+                case EnumPlanType.notification:
+                    new Notification({
+                        title: ppg.plan.name,
+                        body: ppg.plan.information,
+                    }).show()
+                    break;
+                //open browser
+                case EnumPlanType.openBrowser:
+                    shell.openExternal(ppg.plan.information);
+                    break;
+                //open desktop
+                case EnumPlanType.openDesktop:
+                    shell.openPath(ppg.plan.information);
+                    break;
+                //set the volume
+                case EnumPlanType.volume:
+                    loudness.setVolume(Number.parseInt(ppg.plan.information));
+                    break;
+                //
+                case EnumPlanType.focusOn:
+
+                    break;
+            }
+        })
+
     })
 })
 

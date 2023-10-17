@@ -13,7 +13,7 @@ export const PrivateRoute = ({children, requiredRole}: {
     const userHasRequiredRole = requiredRole === role;
 
     if (!isLoggedIn || !userHasRequiredRole) {
-        return <Navigate to='/login'/>;
+        return <Navigate to='/'/>;
     }
 
     return children;

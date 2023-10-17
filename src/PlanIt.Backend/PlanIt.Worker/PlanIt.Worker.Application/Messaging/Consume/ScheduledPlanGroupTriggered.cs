@@ -5,37 +5,39 @@ using PlanIt.Worker.Domain.Enums;
 
 namespace PlanIt.Messaging;
 
-public class ScheduledPlanTriggered
+public class ScheduledPlanGroupTriggered
 {
-    public Guid ScheduledPlanId { get; set; }
+    public Guid ScheduledPlanGroupId { get; set; }
     public ScheduleType ScheduleType { get; set; }
 
-    public PlanVm Plan { get; set; }
-
+    public Guid PlanGroupId { get; set; }
+    
+    public List<PlanPlanGroupVm> PlanPlanGroups { get; set; }
+    
     public Guid UserId { get; set; }
 }
 
-public class ScheduledPlanTriggeredConsumer : IConsumer<ScheduledPlanTriggered>
+public class ScheduledPlanGroupTriggeredConsumer : IConsumer<ScheduledPlanGroupTriggered>
 {
     private readonly IHubContext<PlanHub> _hubContext;
     private readonly IBus _bus;
 
-    public ScheduledPlanTriggeredConsumer(IHubContext<PlanHub> hubContext, IBus bus)
+    public ScheduledPlanGroupTriggeredConsumer(IHubContext<PlanHub> hubContext, IBus bus)
     {
         _hubContext = hubContext;
         _bus = bus;
     }
 
-    public async Task Consume(ConsumeContext<ScheduledPlanTriggered> context)
+    public async Task Consume(ConsumeContext<ScheduledPlanGroupTriggered> context)
     {
         // Sending 'PlanVm' to clients with the same UserId connected to SignalR hub
         // in order to process the plan on the client side
         await _hubContext.Clients.Group(context.Message.UserId.ToString())
-            .SendAsync("ProcessPlan", context.Message.Plan, context.CancellationToken);
+            .SendAsync("ProcessPlanGroup", context.Message.PlanPlanGroups, context.CancellationToken);
 
-        await _bus.Send(new ScheduledPlanProcessed()
+        await _bus.Send(new ScheduledPlanGroupProcessed()
         {
-            ScheduledPlanId = context.Message.ScheduledPlanId,
+            ScheduledPlanGroupId = context.Message.ScheduledPlanGroupId,
             ScheduleType = context.Message.ScheduleType
         });
     }

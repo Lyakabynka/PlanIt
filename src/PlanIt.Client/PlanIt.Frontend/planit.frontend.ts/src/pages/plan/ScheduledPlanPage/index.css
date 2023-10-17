@@ -1,0 +1,8 @@
+.custom-theme-group {
+    --ag-background-color: rgba(0,0,0,0.2) !important;
+    --ag-header-background-color: rgba(0,0,0,0.4) !important;
+    --ag-odd-row-background-color: rgba(0,0,0,0.3) !important;
+    --ag-border-color: #210700;
+    --ag-foreground-color: #fff5d7;
+    --ag-row-border-color: rgba(33,7,0,0.5);
+}

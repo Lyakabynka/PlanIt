@@ -20,8 +20,8 @@ $api.interceptors.response.use((response) => {
         localStorage.removeItem('auth');
         window.location.href = '/login';
     }
-
-    return Promise.reject(error.message);
+    
+    return error.response;
 });
 
 $api.interceptors.request.use(function (config) {

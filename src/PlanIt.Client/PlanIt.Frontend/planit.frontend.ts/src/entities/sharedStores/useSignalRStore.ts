@@ -1,11 +1,16 @@
 import * as signalR from "@microsoft/signalr";
-import { EnumPlanType, EnumPlatform, IPlan, useAuthStore } from "..";
+import { EnumPlanType, EnumPlatform, IPlan, IPlanPlanGroup, useAuthStore } from "..";
 import { create } from "zustand";
+
+interface IPlanPlanGroupExtended extends IPlanPlanGroup {
+    index: number,
+}
 
 declare global {
     interface Window {
         electron: boolean | undefined | null;
         planProcessor: any;
+        planGroupProcessor: any;
     }
 }
 
@@ -40,11 +45,12 @@ export const useSignalRStore = create<ISignalRStore>()((set, get) => ({
 
         const { connection } = get();
 
-        connection!.on("ProcessPlan", (plan) => {
+        connection!.on("ProcessPlan", (plan: IPlan) => {
+
             console.log("Started processing: ");
             console.log(plan);
 
-            switch (plan.planType) {
+            switch (plan.type) {
                 case EnumPlanType.notification:
 
                     break;
@@ -60,11 +66,42 @@ export const useSignalRStore = create<ISignalRStore>()((set, get) => ({
 
                     break;
             }
-
+            console.log(get().isElectron());
+            
             if (get().isElectron()) {
                 window.planProcessor.process(plan);
             }
         });
+
+        connection!.on("ProcessPlanGroup", (planPlanGroups: IPlanPlanGroupExtended[]) => {
+            console.log("Started processing: ");
+            console.log(planPlanGroups);
+
+            planPlanGroups.forEach(ppg => {
+
+                switch (ppg.plan.type) {
+                    case EnumPlanType.notification:
+
+                        break;
+                    case EnumPlanType.voiceCommand:
+                        const synthesis = window.speechSynthesis;
+
+                        const utterance = new SpeechSynthesisUtterance(ppg.plan.information)
+                        utterance.voice = synthesis.getVoices()[4];
+
+                        synthesis.speak(utterance);
+                        break;
+                    case EnumPlanType.weatherCommand:
+
+                        break;
+                }
+
+            });
+
+            if (get().isElectron()) {
+                window.planGroupProcessor.process(planPlanGroups);
+            }
+        })
 
         connection!.onreconnecting(() => {
             console.warn('Connection with server has been lost. Trying to reconnect...');

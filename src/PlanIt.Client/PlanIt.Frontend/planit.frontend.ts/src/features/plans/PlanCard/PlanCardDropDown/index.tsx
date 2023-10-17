@@ -5,12 +5,15 @@ import MenuItem from "@mui/material/MenuItem";
 import React from 'react'
 import { PlanCardDropDownIcon } from "../PlanCardDropDownIcon";
 import { usePlanStore } from "../../../../pages/plan/usePlanStore";
+import { useNavigate } from "react-router-dom";
 
 interface PlanCardDropDownProps {
     planId: string;
 }
 
 export const PlanCardDropDown: React.FC<PlanCardDropDownProps> = ({ planId }) => {
+
+    const navigate = useNavigate();
 
     //
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -30,6 +33,10 @@ export const PlanCardDropDown: React.FC<PlanCardDropDownProps> = ({ planId }) =>
         deletePlan(planId).then();
     }
     //
+
+    const handleOpenScheduledPlans = () => {
+        navigate(`/plans/${planId}/scheduled`)
+    }
 
     return (
         <Box sx={{ flexGrow: 1, position: 'relative', left: '90%' }}>
@@ -65,6 +72,13 @@ export const PlanCardDropDown: React.FC<PlanCardDropDownProps> = ({ planId }) =>
                     'aria-labelledby': 'menu-button-card-actions',
                 }}
             >
+                <MenuItem
+                    onClick={handleOpenScheduledPlans}
+                    sx={{
+                        textAlign: 'center'
+                    }}>
+                    Scheduled
+                </MenuItem>
                 <MenuItem
                     sx={{
                         textAlign: 'center'

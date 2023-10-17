@@ -2,8 +2,8 @@
 
 namespace PlanIt.Messaging;
 
-public class ScheduledPlanProcessed
+public class ScheduledPlanGroupProcessed
 {
-    public Guid ScheduledPlanId { get; set; }
+    public Guid ScheduledPlanGroupId { get; set; }
     public ScheduleType ScheduleType { get; set; }
 }
