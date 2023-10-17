@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PlanIt.Plan.Application.Features.Interfaces;
 using PlanIt.Plan.Domain.Enums;
 
-namespace PlanIt.RabbitMq;
+namespace PlanIt.Messaging;
 
 public class ScheduledPlanProcessed
 {

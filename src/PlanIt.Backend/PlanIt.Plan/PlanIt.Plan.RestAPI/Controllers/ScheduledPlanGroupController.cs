@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanIt.Plan.Application.Mediatr.PlanGroup.Queries.GetPlanGroups;
+using PlanIt.Plan.Application.Mediatr.ScheduledPlanGroup.CreateScheduledPlanGroup;
+using PlanIt.Plan.RestAPI.Models;
 
 namespace PlanIt.Plan.RestAPI.Controllers;
 
@@ -23,9 +25,12 @@ public class ScheduledPlanGroupController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
-    public async Task<IActionResult> CreateScheduledPlanGroup()
+    public async Task<IActionResult> CreateScheduledPlanGroup([FromBody] CreateScheduledPlanGroupRequestModel requestModel)
     {
-        
+        var command = new CreateScheduledPlanGroupCommand()
+        {
+
+        };
         
         return Ok();
     }

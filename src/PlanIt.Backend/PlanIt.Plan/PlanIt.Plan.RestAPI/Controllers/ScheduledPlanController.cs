@@ -16,7 +16,7 @@ public class ScheduledPlanController : ApiControllerBase
     /// Sample request:
     /// POST /scheduled-plan
     /// </remarks>
-    /// <param name="requestModel">SchedulePlanRequestModel with necessary fields</param>
+    /// <param name="requestModel">CreateScheduledPlanRequestModel with necessary fields</param>
     /// <response code="200">Success</response>
     /// <response code="401">User is not authorized</response>
     /// <response code="403">User is forbidden</response>
@@ -29,7 +29,7 @@ public class ScheduledPlanController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateScheduledPlan([FromBody] SchedulePlanRequestModel requestModel)
+    public async Task<IActionResult> CreateScheduledPlan([FromBody] CreateScheduledPlanRequestModel requestModel)
     {
         var request = new CreateScheduledPlanCommand()
         {
@@ -98,9 +98,10 @@ public class ScheduledPlanController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetScheduledPlans([FromRoute] Guid planId)
     {
-        var request = new GetScheduledPlansQuery()
+        var request = new GetPlanScheduleVmQuery()
         {
-            PlanId = planId
+            PlanId = planId,
+            UserId = UserId
         };
 
         return await Mediator.Send(request);

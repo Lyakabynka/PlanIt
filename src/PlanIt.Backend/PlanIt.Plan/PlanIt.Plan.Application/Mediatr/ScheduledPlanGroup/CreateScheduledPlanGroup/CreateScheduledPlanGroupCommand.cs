@@ -1,16 +1,15 @@
 ﻿using MediatR;
-using PlanIt.Plan.Application.Features.Interfaces;
 using PlanIt.Plan.Application.Response;
 using PlanIt.Plan.Domain.Enums;
 
-namespace PlanIt.Plan.Application.Mediatr.ScheduledPlan.Commands.CreateScheduledPlan;
+namespace PlanIt.Plan.Application.Mediatr.ScheduledPlanGroup.CreateScheduledPlanGroup;
 
-public class CreateScheduledPlanCommand : IValidatableRequest<Result>
+public class CreateScheduledPlanGroupCommand: IRequest<Result>
 {
     /// <summary>
     /// Id of the plan to schedule
     /// </summary>
-    public Guid PlanId { get; set; }
+    public Guid PlanGroupId { get; set; }
 
     /// <summary>
     /// <see cref="Type"/>.

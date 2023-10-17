@@ -6,10 +6,10 @@ using Hangfire;
 using Hangfire.Storage.SQLite;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
+using PlanIt.Messaging;
 using PlanIt.Plan.Application.Configurations;
 using PlanIt.Plan.Application.Features.Behaviors;
 using PlanIt.Plan.Application.Features.Interfaces;
-using PlanIt.RabbitMq;
 
 namespace PlanIt.Plan.Application;
 
@@ -29,6 +29,7 @@ public static class DependencyInjection
         services.AddMassTransit(x =>
         {
             x.AddConsumer<ScheduledPlanProcessedConsumer>();
+            x.AddConsumer<ScheduledPlanGroupProcessedConsumer>();
 
             x.UsingRabbitMq((context, config) =>
             {
@@ -51,9 +52,13 @@ public static class DependencyInjection
 
                 config.ReceiveEndpoint(queueSettings.ScheduledPlanProcessed,
                     ep => { ep.ConfigureConsumer<ScheduledPlanProcessedConsumer>(context); });
+                config.ReceiveEndpoint(queueSettings.ScheduledPlanGroupProcessed,
+                    ep => { ep.ConfigureConsumer<ScheduledPlanGroupProcessedConsumer>(context); });
 
                 EndpointConvention.Map<ScheduledPlanTriggered>(
                     new Uri($"queue:{queueSettings.ScheduledPlanTriggered}"));
+                EndpointConvention.Map<ScheduledPlanGroupTriggered>(
+                    new Uri($"queue:{queueSettings.ScheduledPlanGroupTriggered}"));
             });
         });
 

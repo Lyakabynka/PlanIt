@@ -6,4 +6,7 @@ public class RabbitMqQueuesConfiguration
     
     public string ScheduledPlanTriggered { get; set; }
     public string ScheduledPlanProcessed { get; set; }
+    
+    public string ScheduledPlanGroupTriggered { get; set; }
+    public string ScheduledPlanGroupProcessed { get; set; }
 }

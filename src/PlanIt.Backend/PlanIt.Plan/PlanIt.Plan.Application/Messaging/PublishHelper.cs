@@ -1,9 +1,8 @@
 ﻿using MassTransit;
 using PlanIt.Plan.Application.Configurations;
 using PlanIt.Plan.Application.Features.Interfaces;
-using PlanIt.RabbitMq;
 
-namespace PlanIt.RabbitMq;
+namespace PlanIt.Messaging;
 
 public class PublishHelper : IPublishHelper
 {
@@ -17,6 +16,12 @@ public class PublishHelper : IPublishHelper
     }
 
     public async Task PublishScheduledPlanTriggered(ScheduledPlanTriggered message, CancellationToken cancellationToken)
+    {
+        await _bus.Send(message, cancellationToken);
+    }
+
+    public async Task PublishScheduledPlanGroupTriggered(ScheduledPlanGroupTriggered message,
+        CancellationToken cancellationToken)
     {
         await _bus.Send(message, cancellationToken);
     }

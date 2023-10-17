@@ -1,10 +1,11 @@
 ﻿using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using PlanIt.Messaging;
 using PlanIt.Plan.Application.Features.Interfaces;
+using PlanIt.Plan.Application.Mediatr.Plan.Queries.GetPlans;
 using PlanIt.Plan.Application.Response;
 using PlanIt.Plan.Domain.Enums;
-using PlanIt.RabbitMq;
 
 namespace PlanIt.Plan.Application.Mediatr.ScheduledPlan.Commands.CreateScheduledPlan;
 
@@ -30,9 +31,7 @@ public class CreateScheduledPlanCommandHandler :
     {
         var plan = await _dbContext.Plans
             .Where(plan => plan.Id == request.PlanId)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (plan is null) return Result.FormNotFound("Plan does not exist");
+            .FirstAsync(cancellationToken);
 
         if (plan.UserId != request.UserId) 
             return Result.FormForbidden();
@@ -46,12 +45,15 @@ public class CreateScheduledPlanCommandHandler :
                 {
                     ScheduledPlanId = scheduledPlanId,
                     ScheduleType = request.Type,
-                    Id = plan.Id,
-                    Name = plan.Name,
-                    //If arguments are not null, substitute information with arguments
-                    Information = string.IsNullOrWhiteSpace(request.Arguments) ? plan.Information : request.Arguments,
-                    ExecutionPath = plan.ExecutionPath,
-                    PlanType = plan.Type,
+                    Plan = new PlanVm()
+                    {
+                        Id = plan.Id,
+                        Name = plan.Name,
+                        //If arguments are not null, substitute information with arguments
+                        Information = string.IsNullOrWhiteSpace(request.Arguments) ? plan.Information : request.Arguments,
+                        ExecutionPath = plan.ExecutionPath,
+                        Type = plan.Type, 
+                    },
                     UserId = plan.UserId
                 }, cancellationToken);
                 break;
@@ -66,11 +68,15 @@ public class CreateScheduledPlanCommandHandler :
                                 {
                                     ScheduledPlanId = scheduledPlanId,
                                     ScheduleType = request.Type,
-                                    Id = plan.Id,
-                                    Name = plan.Name,
-                                    Information = plan.Information,
-                                    ExecutionPath = plan.ExecutionPath,
-                                    PlanType = plan.Type,
+                                    Plan = new PlanVm()
+                                    {
+                                        Id = plan.Id,
+                                        Name = plan.Name,
+                                        //If arguments are not null, substitute information with arguments
+                                        Information = string.IsNullOrWhiteSpace(request.Arguments) ? plan.Information : request.Arguments,
+                                        ExecutionPath = plan.ExecutionPath,
+                                        Type = plan.Type, 
+                                    },
                                     UserId = plan.UserId
                                 }, cancellationToken),
                         request.ExecuteUtc.Value.ToLocalTime());
@@ -79,6 +85,7 @@ public class CreateScheduledPlanCommandHandler :
                 _dbContext.ScheduledPlans.Add(new Domain.Entities.ScheduledPlan()
                 {
                     Id = scheduledPlanId,
+                    Type = request.Type,
                     HangfireId = hangfireId,
                     ExecuteUtc = request.ExecuteUtc,
                     PlanId = plan.Id
@@ -98,11 +105,15 @@ public class CreateScheduledPlanCommandHandler :
                             {
                                 ScheduledPlanId = scheduledPlanId,
                                 ScheduleType = request.Type,
-                                Id = plan.Id,
-                                Name = plan.Name,
-                                Information = plan.Information,
-                                ExecutionPath = plan.ExecutionPath,
-                                PlanType = plan.Type,
+                                Plan = new PlanVm()
+                                {
+                                    Id = plan.Id,
+                                    Name = plan.Name,
+                                    //If arguments are not null, substitute information with arguments
+                                    Information = string.IsNullOrWhiteSpace(request.Arguments) ? plan.Information : request.Arguments,
+                                    ExecutionPath = plan.ExecutionPath,
+                                    Type = plan.Type, 
+                                },
                                 UserId = plan.UserId
                             }, cancellationToken),
                     request.CronExpressionUtc,
@@ -113,6 +124,7 @@ public class CreateScheduledPlanCommandHandler :
                 
                 _dbContext.ScheduledPlans.Add(new Domain.Entities.ScheduledPlan()
                 {
+                    Id = scheduledPlanId,
                     Type = request.Type,
                     HangfireId = hangfireId,
                     CronExpressionUtc = request.CronExpressionUtc,

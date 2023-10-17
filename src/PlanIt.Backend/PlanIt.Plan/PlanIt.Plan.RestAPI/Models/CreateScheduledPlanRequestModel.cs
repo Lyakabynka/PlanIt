@@ -2,7 +2,7 @@
 
 namespace PlanIt.Plan.RestAPI.Models;
 
-public class SchedulePlanRequestModel
+public class CreateScheduledPlanRequestModel
 {
     public Guid PlanId { get; set; }
     

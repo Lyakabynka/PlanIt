@@ -38,7 +38,8 @@ public class ScheduledPlanTriggeredConsumer : IConsumer<ScheduledPlanTriggered>
 
         await _bus.Send(new ScheduledPlanProcessed()
         {
-            ScheduledPlanId = context.Message.ScheduledPlanId
+            ScheduledPlanId = context.Message.ScheduledPlanId,
+            ScheduleType = context.Message.ScheduleType
         });
     }
 }

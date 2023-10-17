@@ -31,9 +31,7 @@ public class DeleteSchedulePlanCommandHandler : IRequestHandler<DeleteScheduledP
         var scheduledPlan = await _dbContext.ScheduledPlans
             .Where(sp => sp.Id == request.ScheduledPlanId)
             .Include(sp => sp.Plan)
-            .FirstOrDefaultAsync(cancellationToken);
-        if (scheduledPlan is null)
-            return Result.FormNotFound("Scheduled plan does not exist");
+            .FirstAsync(cancellationToken);
         
         if (scheduledPlan.Plan.UserId != request.UserId)
             return Result.FormForbidden();

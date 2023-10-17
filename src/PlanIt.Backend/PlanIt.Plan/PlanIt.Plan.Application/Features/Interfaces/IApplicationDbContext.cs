@@ -10,6 +10,7 @@ public interface IApplicationDbContext
     DbSet<ScheduledPlan> ScheduledPlans { get; set; }
     DbSet<PlanGroup> PlanGroups { get; set; }
     DbSet<PlanPlanGroup> PlanPlanGroups { get; set; }
+    DbSet<ScheduledPlanGroup> ScheduledPlanGroups { get; set; }
     
     DatabaseFacade Database { get; }
 
