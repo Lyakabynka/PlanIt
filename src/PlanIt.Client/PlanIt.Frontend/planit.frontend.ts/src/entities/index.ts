@@ -4,7 +4,7 @@
 
 export { EnumUserRole } from './enums/EnumUserRole'
 export { EnumPlanType } from './enums/EnumPlanType'
-export { EnumScheduledPlanType } from './enums/EnumScheduledPlanType'
+export { EnumScheduledPlanType } from './enums/EnumScheduleType'
 export { EnumPlatform } from './enums/EnumPlatform'
 
 ////////////////////////////////////

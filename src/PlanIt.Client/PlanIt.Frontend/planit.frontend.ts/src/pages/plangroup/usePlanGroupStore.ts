@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { IPlanGroup } from "../../entities/models/planGroup/planGroup";
 import { $api, ENDPOINTS } from "../../shared";
 import { ICreatePlanGroupRequest, IPlanPlanGroup, ISetPlanToPlanGroupRequestModel } from "../../entities";
+import { ICreateScheduledPlanGroupRequest } from "../../entities/requests/scheduledPlanGroup/ICreateScheduledPlanGroupRequestModel";
 
 interface IPlanGroupStore {
     isLoading: boolean
@@ -16,7 +17,7 @@ interface IPlanGroupStore {
 
     deletePlanGroup: (id: string) => Promise<void>
 
-    // createScheduledPlanGroup: (requetModel: ICreate)
+    createScheduledPlanGroup: (requetModel: ICreateScheduledPlanGroupRequest) => Promise<void>
 }
 
 export const usePlanGroupStore = create<IPlanGroupStore>()((set, get) => ({
@@ -64,10 +65,22 @@ export const usePlanGroupStore = create<IPlanGroupStore>()((set, get) => ({
 
         const response = await $api.delete(ENDPOINTS.PLANGROUP.DELETE_PLANGROUP.replace('{id:guid}', id));
 
+        if (response.status === 200) {
+            set({ planGroups: get().planGroups.filter(pg => pg.id != id) })
+        }
+
         set({ isLoading: false });
     },
 
-    // createScheduledPlanGroup: async (requestModel: ) => {
+    createScheduledPlanGroup: async (requestModel: ICreateScheduledPlanGroupRequest) => {
+        //TODO: to prevent from re-loading Plans delete isLoading, because it makes render Loading element instead of plans
+        // and add another loading into schedule plan dialog
+        // set({ isLoading: true });
 
-    // }
+        console.log(requestModel);
+
+        const response = await $api.post<any>(ENDPOINTS.SCHEDULED_PLANGROUP.CREATE_SCHEDULED_PLANGROUP, requestModel);
+
+        // set({ isLoading: false });
+    }
 }))

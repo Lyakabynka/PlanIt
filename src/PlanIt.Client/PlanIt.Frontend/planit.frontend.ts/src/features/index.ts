@@ -5,6 +5,6 @@ export { PlanCard } from './plans/PlanCard'
 export { SchedulePlanDialog } from './plans/SchedulePlanDialog'
 export { CreatePlanButton } from './plans/CreatePlanButton';
 export {CreatePlanListenPlaceHolder} from './plans/CreatePlanListenPlaceHolder'
-export {Listen} from './plans/Listen'
+export {Listen} from './Listen'
 export {PlanGroupCard} from './plangroup/PlanGroupCard'
 export {ManagePlanGroupSaveButtonPlaceHolder} from './plangroup/ManagePlanGroupSaveButtonPlaceHolder'

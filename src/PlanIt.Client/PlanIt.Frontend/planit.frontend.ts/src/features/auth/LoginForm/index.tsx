@@ -45,7 +45,7 @@ export function LoginForm() {
         login({ username: formik.values.username, password: formik.values.password }).then();
 
         if (errorMessage?.length == 0)
-            navigate('/login');
+            navigate('/plans');
     };
 
     useEffect(() => {

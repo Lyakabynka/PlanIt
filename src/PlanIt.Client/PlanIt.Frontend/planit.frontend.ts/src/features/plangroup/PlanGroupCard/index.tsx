@@ -4,6 +4,7 @@ import { IPlanGroup } from '../../../entities/models/planGroup/planGroup'
 import { PlanGroupCardDropDown } from './PlanGroupCardDropDown'
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
+import { SchedulePlanGroupDialog } from '../SchedulePlanGroupDialog';
 
 interface IPlanGroupProps {
     planGroup: IPlanGroup
@@ -96,7 +97,10 @@ export const PlanGroupCard: React.FC<IPlanGroupProps> = ({ planGroup }) => {
                     </Button>
                 </CardActions>
             </Card>
-            {/* scheduleplangroupdialog */}
+            <SchedulePlanGroupDialog
+                open={openSchedulePlanGroupDialog}
+                setOpen={setOpenSchedulePlanGroupDialog}
+                planGroupId={planGroup.id} />
         </Box >
     )
 }

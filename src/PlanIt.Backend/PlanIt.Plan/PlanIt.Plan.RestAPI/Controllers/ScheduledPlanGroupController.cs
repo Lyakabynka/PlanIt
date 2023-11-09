@@ -25,13 +25,19 @@ public class ScheduledPlanGroupController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
-    public async Task<IActionResult> CreateScheduledPlanGroup([FromBody] CreateScheduledPlanGroupRequestModel requestModel)
+    public async Task<IActionResult> CreateScheduledPlanGroup(
+        [FromBody] CreateScheduledPlanGroupRequestModel requestModel)
     {
-        var command = new CreateScheduledPlanGroupCommand()
+        var request = new CreateScheduledPlanGroupCommand()
         {
-
+            PlanGroupId = requestModel.PlanGroupId,
+            Type = requestModel.Type,
+            CronExpressionUtc = requestModel.CronExpressionUtc,
+            ExecuteUtc = requestModel.ExecuteUtc,
+            Arguments = requestModel.Arguments,
+            UserId = UserId
         };
-        
-        return Ok();
+
+        return await Mediator.Send(request);
     }
 }

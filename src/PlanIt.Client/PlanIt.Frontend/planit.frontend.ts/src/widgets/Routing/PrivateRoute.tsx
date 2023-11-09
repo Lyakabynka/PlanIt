@@ -5,7 +5,7 @@ export const PrivateRoute = ({children, requiredRole}: {
     children: JSX.Element;
     requiredRole: string;
 }) => {
-    const {isLoggedIn, isLoading, role} = useAuthStore();
+    const {isLoggedIn, isLoading, role, clearAuth} = useAuthStore();
 
     if (isLoading) {
         return <p className="container">Checking auth..</p>;

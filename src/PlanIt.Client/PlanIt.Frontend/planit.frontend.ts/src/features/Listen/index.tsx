@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import { IconButton } from '@mui/material';
-import { usePlanStore } from '../../../pages/plan/usePlanStore';
+import { usePlanStore } from '../../pages/plan/usePlanStore';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { EnumPlanType, EnumScheduledPlanType, IPlan, ICreateScheduledPlanRequest } from '../../../entities';
+import { EnumPlanType, EnumScheduledPlanType, IPlan, ICreateScheduledPlanRequest } from '../../entities';
 import BlockIcon from '@mui/icons-material/Block';
 
 function generateCommands(
@@ -12,6 +12,7 @@ function generateCommands(
     schedulePlan: (requestModel: ICreateScheduledPlanRequest) => Promise<void>) {
 
     const commands = plans.map((plan) => {
+        console.log(plan);
 
         switch (plan.type) {
             case EnumPlanType.volume:
@@ -65,6 +66,11 @@ function generateCommands(
     return commands;
 }
 
+// interface IListenProps {
+//     generateCommands: (
+//         array: [], schedule: (request: ICreateScheduledPlanRequest | ICreateScheduledPlanGroupRequest) => Promise<void>) => void
+// }
+
 export const Listen = () => {
 
     const { plans, createScheduledPlan } = usePlanStore();
@@ -77,10 +83,9 @@ export const Listen = () => {
         resetTranscript,
         listening } = useSpeechRecognition({ commands });
 
-
     const handleClick = () => {
         if (!listening) {
-            SpeechRecognition.startListening({continuous: true});
+            SpeechRecognition.startListening({ continuous: true });
         }
         else {
             SpeechRecognition.stopListening();

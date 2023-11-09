@@ -24,7 +24,7 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
 
         const response = await $api.get<IPlan[]>(ENDPOINTS.PLAN.GET_PLANS);
 
-        set({ plans: response.data, });
+        set({ plans: response.data });
 
         set({ isLoading: false })
     },
@@ -53,13 +53,13 @@ export const usePlanStore = create<IPlanStore>()((set, get) => ({
     createScheduledPlan: async (requestModel: ICreateScheduledPlanRequest) => {
         //TODO: to prevent from re-loading Plans delete isLoading, because it makes render Loading element instead of plans
         // and add another loading into schedule plan dialog
-        set({ isLoading: true });
+        // set({ isLoading: true });
 
         console.log(requestModel);
 
         const response = await $api.post<any>(ENDPOINTS.SCHEDULED_PLAN.CREATE_SCHEDULED_PLAN, requestModel);
 
-        set({ isLoading: false });
+        // set({ isLoading: false });
     },
 
     deleteScheduledPlan: async (id: string) => {

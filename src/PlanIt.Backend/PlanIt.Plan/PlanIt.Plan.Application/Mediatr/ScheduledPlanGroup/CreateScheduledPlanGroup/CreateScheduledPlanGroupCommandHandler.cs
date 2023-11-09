@@ -61,6 +61,7 @@ public class CreateScheduledPlanGroupCommandHandler: IRequestHandler<CreateSched
         string? hangfireId = null;
         switch (request.Type)
         {
+            //TODO: replace information with provided arguments ( 'arguments' are provided if it is executed with speech recognition )
             case ScheduleType.Instant:
                 await _publishHelper.PublishScheduledPlanGroupTriggered(new ScheduledPlanGroupTriggered()
                 {

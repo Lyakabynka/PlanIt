@@ -8,7 +8,7 @@ function init() {
     });
     contextBridge.exposeInMainWorld('planGroupProcessor', {
         process: (planPlanGroups) => {
-            return ipcRenderer.send(' process_planGroup_desktop', planPlanGroups);
+            return ipcRenderer.send('process_planGroup_desktop', planPlanGroups);
         }
     });
     contextBridge.exposeInMainWorld('electron', {});

@@ -189,6 +189,18 @@
         }
       ],
       "DownstreamPathTemplate": "/plan-group/{id:guid}"
+    },
+    {
+      "UpstreamPathTemplate": "/scheduled-plan-group",
+      "UpstreamHttpMethod": ["Post"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "planit.plan",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/scheduled-plan-group"
     }
   ],
   "GlobalConfiguration": {

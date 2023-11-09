@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import { CreatePlanButton } from '../CreatePlanButton'
-import { Listen } from '../Listen'
+import { Listen } from '../../Listen'
 
 export const CreatePlanListenPlaceHolder = () => {
     return (

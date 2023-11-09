@@ -56,10 +56,19 @@ export const useAuthStore = create<IAuthStore>()(persist((set, get) => ({
         console.log(response.data);
         
 
-        if (response?.status == 401) {
+        if (response?.status == 401 || response.status == 406) {
+
             const error = response.data;
-            set({ errorField: error.errorField, errorMessage: error.errorMessage })
-        } else {
+
+            console.log(error.errorsd.authorization[0])
+
+            set({ 
+                // errorField: error.errors, 
+                errorMessage: error.errors.authorization[0]
+            })
+
+        }
+        else {
 
             console.log(response.data);
 
